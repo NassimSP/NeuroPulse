@@ -1,0 +1,6 @@
+﻿🛠️ Build Log
+
+
+🗓️ 29 May – First prototype created in Replit. Looks promising!
+Next: Add custom questions + confidence buttons
+Pain point: UI spacing could be cleaner. Would like a start screen.

@@ -1,0 +1,73 @@
+﻿📌 PROJECT OVERVIEW
+Purpose: To build a sustainable AI-powered business based on neurodivergent pain points and personal experience.  
+Vision: Launch one MVP, test it, learn, and build from there.
+
+
+🎯 Current Primary Goal:
+Build and validate an ADHD-friendly microlearning MVP (gamified, quiz-based, 5-minute sessions).
+
+
+---
+
+
+🧠 CURRENT IDEA FOCUS: AI Learning Platform
+- Problem: Traditional online learning doesn’t support ADHD learning styles (lecture-heavy, non-interactive).
+- Proposed solution: AI-powered platform delivering spaced-repetition, gamified quizzes personalized to user needs.
+- Status: Deep research completed (Claude), MVP planning stage.
+
+
+---
+
+
+📊 DEEP RESEARCH LOG
+🗓️ Claude – May 2025:
+– Confirmed strong market gap in ADHD/ND learning
+– Recommended adult ADHD microlearning as beachhead
+– Suggested quiz-first MVP with voice/visual features for dyspraxia
+[Include summary or Claude link here]
+
+
+🗓️ ChatGPT – May 2025:
+– Helped brainstorm quiz interface
+– Drafted potential UI with Replit suggestions
+– Provided ADHD-optimized feature list
+
+
+---
+
+
+🛠️ MVP TASK BOARD
+[ ] Finalize MVP scope
+[ ] Build initial quiz in Replit
+[ ] Create minimal landing page
+[ ] Collect 3 test users
+[ ] Review feedback
+
+
+---
+
+
+📁 FILE INDEX
+– Potential Business Ideas.docx  
+– Strategic Plans.pdf  
+– Claude Deep Research Summary  
+– AI_Career_Pathways_Summary.docx
+
+
+---
+
+
+💡 IDEAS PARKING LOT
+– Human-AI onboarding assistant  
+– ADHD evening debrief tool  
+– Focus buddy / virtual coworking AI  
+
+
+---
+
+
+🧭 WEEKLY REVIEW
+**Tuesday 4 June**  
+✅ Back from weekend  
+❌ Feeling a bit ungrounded  
+Next Action: Finish MVP prompt to Claude for execution planning

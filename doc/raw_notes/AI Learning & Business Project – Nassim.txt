@@ -1,0 +1,94 @@
+﻿Next Three Steps:
+
+
+📝 Step 1: Build Your Quiz Prompt (Start Now)
+Time needed: 25 minutes
+Goal: Create a working prompt that generates ADHD-friendly quizzes
+Exact instructions:
+1. Open a new ChatGPT chat (not this Claude one)
+2. Copy and paste this starter prompt (I've written it for you):
+You are an ADHD-friendly learning assistant. Create engaging, bite-sized quizzes that help people learn and retain information.
+
+
+When I give you a topic, create:
+- 5 multiple choice questions 
+- Each question should be clear and specific
+- Include one "aha moment" fact per question
+- Add encouraging feedback for right AND wrong answers
+- Keep questions short (max 20 words)
+- Make it feel like a game, not a test
+
+
+Topic: [INSERT TOPIC HERE]
+
+
+Format your response exactly like this:
+**Question 1:** [question text]
+A) [option] B) [option] C) [option] D) [option]
+*Answer: [letter] - [encouraging explanation]*
+
+
+Ready? Let's make learning fun for ADHD brains!
+3. Test it with this topic first: "Basic time management for ADHD"
+4. See what it generates
+What success looks like: You get 5 questions that feel engaging, not overwhelming, and you think "I'd actually want to take this quiz."
+________________
+
+
+🧪 When You Finish Step 1:
+Update your Google Doc with:
+* ✅ Daily Win: "Built my first quiz prompt"
+* Next Step: Test the prompt on 2 more topics
+Then either:
+* Continue to Step 2 if you have energy
+* OR take a break and come back later
+________________
+
+
+🔄 Step 2: Test On 3 Different Topics
+Time needed: 15 minutes
+Goal: See if your prompt works across different subjects
+Test these topics:
+1. ✅ "Basic time management for ADHD" (already done)
+2. "Job interview preparation basics"
+3. "Understanding Universal Credit rules"
+For each topic:
+* Use the same prompt, just change the topic
+* Take the quiz yourself
+* Note: Does it feel ADHD-friendly? Too hard? Too easy?
+________________
+
+
+📊 Step 3: Document Results
+Time needed: 10 minutes
+In your Google Doc, write:
+* Which quiz felt best?
+* What made the questions engaging vs boring?
+* Any ideas for improvements?
+* Rate each quiz 1-10 for "Would I actually use this?"
+________________
+
+
+
+
+🚀 Your Next Three Steps (Updated):
+Step 4: Improve Your Prompt
+Time: 20 minutes
+Goal: Make one targeted improvement based on your testing
+Pick ONE of these improvements:
+* Option A: Add difficulty levels ("beginner/intermediate/advanced")
+* Option B: Add more engaging question formats (true/false + multiple choice mix)
+* Option C: Improve the feedback to be more encouraging/game-like
+Step 5: Test Your Improved Version
+Time: 15 minutes
+Goal: See if your improvement actually works
+* Use the same 3 topics
+* Compare to your original results
+* Rate the improvement 1-10
+Step 6: Plan Your Simple MVP
+Time: 15 minutes
+Goal: Define what you'll build first
+Based on your testing, write in your doc:
+* What's the minimum feature set that would be useful?
+* Who would you test it with first?
+* What platform will you build it on? (Replit/basic web page)

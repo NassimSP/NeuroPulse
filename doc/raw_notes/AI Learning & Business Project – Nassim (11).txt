@@ -1,0 +1,247 @@
+﻿# NeuroPulse – Replit Build Log (v1)
+
+
+📅 Date: 29 May 2025  
+🧠 Purpose: Documenting the current version of the ADHD microlearning quiz MVP for version tracking, Claude analysis, and historical backup.
+
+
+---
+
+
+## 🔧 .replit
+```txt
+
+
+
+
+________________
+
+
+
+
+
+
+**Project Name:** NeuroPulse - ADHD Learning Revolution
+
+
+**Description:**
+I'm building a gamified microlearning platform for adults with ADHD/dyspraxia that makes learning feel like playing Duolingo or Sololearn. This isn't just a quiz generator - it's designed to become a comprehensive learning system that hits dopamine receptors and creates genuine retention.
+
+
+**Immediate MVP (Build This First):**
+- Welcome/start screen with motivating message
+- Topic input with autocomplete suggestions
+- Difficulty selector: Beginner → Intermediate → Advanced
+- 5-question adaptive quiz cycles
+- Confidence-based answering: "Sure!" / "Think So" / "Guessing"
+- Instant dopamine rewards: colorful celebrations, encouraging messages
+- Score tracking with visual progress bar
+- "Next Topic" or "Try Again" options
+
+
+**Core Design Principles:**
+- Clean, approachable UI like Duolingo/Sololearn
+- Large touch targets (min 44x44px for mobile)
+- Calm base colors (blues/greens) with dopamine-triggering accents
+- Smooth animations (not jarring)
+- 16px+ fonts, high contrast
+- Generous white space, no clutter
+
+
+**Technical Architecture:**
+- Pure HTML/CSS/JavaScript (no frameworks)
+- Mobile-first responsive design
+- LocalStorage for streak tracking
+- Prepared for OpenAI API integration
+- Clean, modular code for easy expansion
+
+
+**Gamification Elements:**
+- Visual progress bars that fill up
+- Streak counter (days in a row)
+- Achievement unlocks (study 3 days, complete 10 quizzes, etc.)
+- Tier progression: Must score 95%+ to unlock next difficulty
+- Encouraging failure messages ("Almost there! Your brain is growing!")
+
+
+**Professional Training Focus:**
+- Quick 5-minute learning bursts for busy professionals
+- Topics relevant to workplace upskilling
+- Future: Document upload for custom corporate training
+- Bite-sized chunks perfect for mandatory training
+
+
+**User Flow:**
+1. Welcome screen: "Ready to level up your brain?"
+2. Topic selection: "What shall we master today?"
+3. Difficulty choice (locked tiers add intrigue)
+4. 5 engaging questions with confidence selection
+5. Instant feedback with learning reinforcement
+6. Celebration screen with options to continue
+
+
+**File Structure:**
+- index.html (welcome/home screen)
+- quiz.html (main quiz interface)
+- styles.css (clean, ADHD-optimized styling)
+- app.js (quiz logic, state management)
+- gamification.js (streaks, achievements, progress)
+- api-prep.js (ready for OpenAI integration)
+
+
+**Future Vision (Not in MVP but design for it):**
+- Question variety: true/false, drag-drop, visual matching
+- AI-generated diagrams and visual explanations
+- Document upload for professional courses
+- Mini-games between quiz sessions
+- Spaced repetition algorithm
+- Social features (compete with friends)
+- Audio/visual question options
+- Corporate team dashboards
+
+
+**Success Metrics:**
+- Users complete full quiz sets (not abandoning mid-way)
+- Users return multiple days (streak building)
+- 80%+ positive feedback on focus and enjoyment
+- Average session time 5-10 minutes
+
+
+**Target Users:**
+Adult professionals with ADHD who:
+- Struggle with traditional online courses
+- Need to upskill for work but find training boring
+- Want quick wins and dopamine hits
+- Learn better through gamification
+- Have 5-10 minutes here and there (not hour-long sessions)
+
+
+**Key Differentiator:**
+This isn't homework - it's a game that happens to teach. Every interaction should spark joy and make users want to come back. Think "Duolingo for anything you want to learn."
+
+
+
+
+________________
+
+
+
+
+**Project Name:** NeuroPulse - Universal Adaptive Learning for ADHD Minds
+
+
+**Description:**
+I'm building a gamified microlearning platform that makes ANY subject learnable for adults with ADHD/dyspraxia. From quantum physics to plumbing, from Excel to electrical engineering - delivered in dopamine-optimized, bite-sized chunks that actually stick.
+
+
+**Core MVP Features:**
+- Dynamic topic system: Learn ANYTHING (chemistry, coding, plumbing, finance, languages)
+- Adaptive session length: 5-10 minute bursts (not fixed question counts)
+- Three difficulty paths with progression gates
+- Multiple interaction types:
+  * Multiple choice with confidence levels
+  * Interactive diagrams (drag-and-drop)
+  * Timed challenges with leaderboards
+  * Visual matching exercises
+- Instant dopamine rewards and progress tracking
+- Learning journey tracker (2 weeks for enzymes → 1 year for finance mastery)
+
+
+**Universal Learning Examples:**
+- Chemistry student: Interactive molecule building, timed equation balancing
+- Electrician trainee: Wire virtual circuits before timer expires, safety quiz scenarios
+- Data analyst: Drag correct formulas to spreadsheet cells, interpret visualizations
+- Language learner: Audio matching, sentence construction puzzles
+- Professional upskilling: Compliance scenarios, best practice challenges
+
+
+**Design Philosophy:**
+- Like Duolingo and Sololearn had a baby - beautiful, addictive, effective
+- Every subject gets custom interaction types (not just text quizzes)
+- Mobile-first but desktop-powerful
+- Zero cognitive overload - one concept at a time
+- Celebrates small wins constantly
+
+
+**Technical Architecture:**
+- Modular HTML/CSS/JS structure
+- Component-based quiz types (easily add new interaction styles)
+- Canvas API ready for interactive diagrams
+- LocalStorage for progress across all subjects
+- Prepared for OpenAI integration (adaptive content generation)
+- Plugin architecture for future subject-specific modules
+
+
+**Gamification 2.0:**
+- Personal records per topic (fastest circuit wiring, chemistry streak)
+- Global leaderboards for timed challenges
+- Learning path visualization (see your journey)
+- Milestone celebrations (first week, first month, topic mastery)
+- Dynamic difficulty adjustment based on performance
+
+
+**Learning Journey System:**
+- Track multiple subjects simultaneously
+- Visual progress maps per topic
+- Estimated time to mastery (based on user's pace)
+- Spaced repetition built into journey planning
+- Achievement badges for depth (2-week sprints) and breadth (5+ topics)
+
+
+**File Structure:**
+- index.html (subject selector dashboard)
+- quiz-engine.js (core quiz logic)
+- interactions/
+  * multiple-choice.js
+  * drag-drop.js
+  * timed-challenge.js
+  * diagram-builder.js
+- subjects/ (modular subject configs)
+  * chemistry.js
+  * electrical.js
+  * finance.js
+  * [easily add more]
+- progress-tracker.js
+- gamification.js
+
+
+**Smart Features:**
+- Auto-detect optimal session length per user
+- Suggest next topic based on interests
+- Adaptive difficulty within sessions
+- "Deep dive" vs "Quick refresh" modes
+
+
+**Vision for Growth:**
+- Subject marketplace (community-created content)
+- AI tutor for stuck moments
+- Company training portals
+- Integration with other neurodivergent tools
+- Mobile app with offline mode
+- VR/AR for spatial learners
+
+
+**Success Metrics:**
+- Users learn across multiple subjects (not just one)
+- Sustained engagement over weeks/months
+- Measurable knowledge retention
+- "This changed how I learn" testimonials
+
+
+**Target Users:**
+Anyone with ADHD who wants to learn:
+- Students cramming for exams
+- Professionals upskilling
+- Hobbyists going deep
+- Career changers
+- Curious minds exploring everything
+
+
+**The Promise:**
+"Learn anything, remember everything, love every minute."
+Every subject becomes as addictive as your favorite game.
+
+
+
+
+________________
