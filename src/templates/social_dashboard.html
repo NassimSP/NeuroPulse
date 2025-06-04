@@ -1,0 +1,539 @@
+{% extends "base.html" %}
+
+{% block title %}Social Learning - NeuroPulse{% endblock %}
+
+{% block description %}Connect with peers, join challenges, and learn collaboratively{% endblock %}
+
+{% block content %}
+<!-- Social Dashboard Header -->
+<div class="social-header mb-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="display-5 fw-bold mb-2" style="color: hsl(var(--primary-color));">
+                <i data-feather="users" class="me-3" style="width: 48px; height: 48px;"></i>
+                Social Learning Hub
+            </h1>
+            <p class="lead mb-0" style="color: hsl(var(--text-secondary));">
+                Connect, compete, and learn together with fellow learners worldwide
+            </p>
+        </div>
+        <div class="social-quick-actions">
+            <a href="/challenges/create" class="btn btn-primary">
+                <i data-feather="plus"></i>
+                Create Challenge
+            </a>
+            <a href="/video-sessions/create" class="btn btn-primary">
+                <i data-feather="video"></i>
+                Host Video Session
+            </a>
+            <a href="/lms/courses/create" class="btn btn-primary">
+                <i data-feather="book"></i>
+                Create Course
+            </a>
+            <a href="/study-groups/create" class="btn btn-outline-primary">
+                <i data-feather="users"></i>
+                Start Study Group
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Achievement Overview -->
+<div class="achievement-overview mb-5">
+    <div class="card border-primary">
+        <div class="card-body">
+            <h3 class="card-title">
+                <i data-feather="award" class="me-2"></i>
+                Your Social Learning Journey
+            </h3>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="achievement-stat">
+                        <div class="stat-icon">
+                            <i data-feather="target" style="color: hsl(var(--primary-color));"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{{ achievements.stats.challenges_participated }}</div>
+                            <div class="stat-label">Challenges Joined</div>
+                            <div class="progress-mini">
+                                <div class="progress-bar" style="width: {{ (achievements.levels.challenger / 5) * 100 }}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="achievement-stat">
+                        <div class="stat-icon">
+                            <i data-feather="trophy" style="color: hsl(var(--warning-color));"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{{ achievements.stats.challenges_won }}</div>
+                            <div class="stat-label">Challenges Won</div>
+                            <div class="progress-mini">
+                                <div class="progress-bar" style="width: {{ (achievements.levels.winner / 5) * 100 }}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="achievement-stat">
+                        <div class="stat-icon">
+                            <i data-feather="users" style="color: hsl(var(--secondary-color));"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{{ achievements.stats.study_groups_joined }}</div>
+                            <div class="stat-label">Study Groups</div>
+                            <div class="progress-mini">
+                                <div class="progress-bar" style="width: {{ (achievements.levels.collaborator / 5) * 100 }}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="achievement-stat">
+                        <div class="stat-icon">
+                            <i data-feather="help-circle" style="color: hsl(var(--accent-color));"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{{ achievements.stats.peer_help_given }}</div>
+                            <div class="stat-label">Peers Helped</div>
+                            <div class="progress-mini">
+                                <div class="progress-bar" style="width: {{ (achievements.levels.mentor / 5) * 100 }}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="row g-4">
+    <!-- Active Challenges -->
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i data-feather="zap" class="me-2"></i>
+                    Active Challenges
+                </h4>
+                <a href="/challenges" class="btn btn-outline-primary btn-sm">View All</a>
+            </div>
+            <div class="card-body">
+                {% if active_challenges %}
+                <div class="challenges-grid">
+                    {% for challenge in active_challenges %}
+                    <div class="challenge-card" onclick="location.href='/challenges/{{ challenge.id }}'">
+                        <div class="challenge-header">
+                            <h5 class="challenge-title">{{ challenge.title }}</h5>
+                            <span class="difficulty-badge difficulty-{{ challenge.difficulty_level }}">
+                                {{ challenge.difficulty_level.title() }}
+                            </span>
+                        </div>
+                        <p class="challenge-description">{{ challenge.description[:100] }}...</p>
+                        <div class="challenge-meta">
+                            <span class="participants">
+                                <i data-feather="users" style="width: 14px; height: 14px;"></i>
+                                {{ challenge.participant_count }}/{{ challenge.max_participants }}
+                            </span>
+                            <span class="subject">
+                                <i data-feather="book" style="width: 14px; height: 14px;"></i>
+                                {{ challenge.subject_category.replace('_', ' ').title() }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state text-center py-4">
+                    <i data-feather="target" style="width: 48px; height: 48px; color: hsl(var(--text-muted));"></i>
+                    <h5 class="mt-3" style="color: hsl(var(--text-secondary));">No Active Challenges</h5>
+                    <p style="color: hsl(var(--text-muted));">Be the first to create a challenge!</p>
+                    <a href="/challenges/create" class="btn btn-primary">Create Challenge</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Study Groups & Quick Actions -->
+    <div class="col-lg-4">
+        <!-- Study Groups -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i data-feather="users" class="me-2"></i>
+                    Your Study Groups
+                </h5>
+                <a href="/study-groups" class="btn btn-outline-primary btn-sm">Browse All</a>
+            </div>
+            <div class="card-body">
+                {% if user_groups %}
+                {% for group in user_groups %}
+                <div class="study-group-item" onclick="location.href='/study-groups/{{ group.id }}'">
+                    <h6 class="group-name">{{ group.name }}</h6>
+                    <p class="group-subject">{{ group.subject_focus.replace('_', ' ').title() }}</p>
+                    <div class="group-stats">
+                        <span class="member-count">{{ group.members|length }} members</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state text-center py-3">
+                    <i data-feather="users" style="width: 32px; height: 32px; color: hsl(var(--text-muted));"></i>
+                    <p class="mt-2 mb-2" style="color: hsl(var(--text-muted));">No study groups yet</p>
+                    <a href="/study-groups" class="btn btn-sm btn-outline-primary">Find Groups</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recommended Activities -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i data-feather="compass" class="me-2"></i>
+                    Recommended for You
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for activity in achievements.recommended_activities %}
+                <div class="recommendation-item">
+                    <i data-feather="arrow-right" class="me-2" style="width: 16px; height: 16px; color: hsl(var(--primary-color));"></i>
+                    {{ activity }}
+                </div>
+                {% endfor %}
+                
+                {% if not achievements.recommended_activities %}
+                <div class="recommendation-item">
+                    <i data-feather="star" class="me-2" style="width: 16px; height: 16px; color: hsl(var(--warning-color));"></i>
+                    You're doing great! Keep up the social learning momentum.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Navigation -->
+<div class="quick-navigation mt-5">
+    <div class="row g-3">
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+            <a href="/lms" class="nav-card">
+                <i data-feather="book"></i>
+                <h6>LMS</h6>
+                <p>Course management</p>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+            <a href="/chat" class="nav-card">
+                <i data-feather="message-circle"></i>
+                <h6>Chat</h6>
+                <p>Real-time discussions</p>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+            <a href="/video-sessions" class="nav-card">
+                <i data-feather="video"></i>
+                <h6>Video Sessions</h6>
+                <p>Live study groups</p>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+            <a href="/analytics" class="nav-card">
+                <i data-feather="bar-chart-2"></i>
+                <h6>Analytics</h6>
+                <p>Learning insights</p>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+            <a href="/reports" class="nav-card">
+                <i data-feather="file-text"></i>
+                <h6>Reports</h6>
+                <p>Executive insights</p>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+            <a href="/leaderboards" class="nav-card">
+                <i data-feather="trending-up"></i>
+                <h6>Leaderboards</h6>
+                <p>Global rankings</p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+.social-header {
+    background: linear-gradient(135deg, hsl(var(--primary-color) / 0.1), hsl(var(--secondary-color) / 0.05));
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    border: 2px solid hsl(var(--primary-color) / 0.2);
+}
+
+.social-quick-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.achievement-overview .card {
+    background: linear-gradient(135deg, hsl(var(--secondary-color) / 0.05), hsl(var(--primary-color) / 0.05));
+}
+
+.achievement-stat {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-align: left;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsl(var(--surface));
+    border-radius: var(--border-radius-md);
+    border: 2px solid hsl(var(--surface-alt));
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: hsl(var(--text-primary));
+}
+
+.stat-label {
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+    margin-bottom: 0.25rem;
+}
+
+.progress-mini {
+    width: 100%;
+    height: 4px;
+    background: hsl(var(--surface-alt));
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-mini .progress-bar {
+    height: 100%;
+    background: hsl(var(--primary-color));
+    transition: width 0.3s ease;
+}
+
+.challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.challenge-card {
+    background: hsl(var(--surface));
+    border: 1px solid hsl(var(--surface-alt));
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.challenge-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: hsl(var(--primary-color));
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.challenge-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+    margin: 0;
+    flex: 1;
+}
+
+.challenge-description {
+    color: hsl(var(--text-secondary));
+    margin-bottom: 1rem;
+    font-size: var(--font-size-sm);
+}
+
+.challenge-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+}
+
+.challenge-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.study-group-item {
+    padding: 1rem;
+    border: 1px solid hsl(var(--surface-alt));
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.study-group-item:hover {
+    border-color: hsl(var(--primary-color));
+    background: hsl(var(--primary-color) / 0.05);
+}
+
+.study-group-item:last-child {
+    margin-bottom: 0;
+}
+
+.group-name {
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+    margin-bottom: 0.25rem;
+}
+
+.group-subject {
+    color: hsl(var(--text-secondary));
+    font-size: var(--font-size-sm);
+    margin-bottom: 0.5rem;
+}
+
+.group-stats {
+    font-size: var(--font-size-xs);
+    color: hsl(var(--text-muted));
+}
+
+.recommendation-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid hsl(var(--surface-alt));
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+}
+
+.recommendation-item:last-child {
+    border-bottom: none;
+}
+
+.quick-navigation {
+    margin-top: 3rem;
+}
+
+.nav-card {
+    display: block;
+    background: hsl(var(--surface));
+    border: 2px solid hsl(var(--surface-alt));
+    border-radius: var(--border-radius-md);
+    padding: 2rem;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-fast);
+}
+
+.nav-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: hsl(var(--primary-color));
+    text-decoration: none;
+    color: inherit;
+}
+
+.nav-card i {
+    width: 32px;
+    height: 32px;
+    color: hsl(var(--primary-color));
+    margin-bottom: 1rem;
+}
+
+.nav-card h6 {
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+    margin-bottom: 0.5rem;
+}
+
+.nav-card p {
+    color: hsl(var(--text-secondary));
+    font-size: var(--font-size-sm);
+    margin: 0;
+}
+
+.empty-state {
+    padding: 2rem;
+}
+
+.difficulty-foundation {
+    background-color: hsl(var(--secondary-color) / 0.2);
+    color: hsl(var(--secondary-color));
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.difficulty-intermediate {
+    background-color: hsl(var(--warning-color) / 0.2);
+    color: hsl(var(--warning-color));
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.difficulty-advanced {
+    background-color: hsl(var(--accent-color) / 0.2);
+    color: hsl(var(--accent-color));
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.difficulty-expert {
+    background-color: hsl(var(--danger-color) / 0.2);
+    color: hsl(var(--danger-color));
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
+    
+    // Animate cards on load
+    const cards = document.querySelectorAll('.challenge-card, .nav-card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.animation = 'slideInUp 0.6s ease-out both';
+    });
+    
+    // Add click handlers for better UX
+    document.querySelectorAll('.challenge-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const url = this.getAttribute('onclick').match(/location\.href='([^']+)'/)[1];
+            window.location.href = url;
+        });
+    });
+});
+</script>
+{% endblock %}

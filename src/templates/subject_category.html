@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+
+{% block title %}{{ subject_data.name }} - NeuroPulse{% endblock %}
+
+{% block description %}Explore {{ subject_data.name }} topics with adaptive learning designed for your success{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<div class="d-flex align-items-center mb-4">
+    <a href="/subjects" class="btn btn-outline-secondary me-3">
+        <i data-feather="arrow-left" style="width: 16px; height: 16px;"></i>
+        Back to Subjects
+    </a>
+    <div>
+        <h1 class="display-5 fw-bold mb-2" style="color: {{ subject_data.color }};">
+            <i data-feather="{{ subject_data.icon }}" class="me-3" style="width: 48px; height: 48px;"></i>
+            {{ subject_data.name }}
+        </h1>
+        <p class="lead mb-0" style="color: hsl(var(--text-secondary));">
+            Master comprehensive topics with adaptive difficulty and real-world applications
+        </p>
+    </div>
+</div>
+
+<!-- Learning Preferences -->
+<div class="card mb-5" style="background: linear-gradient(135deg, {{ subject_data.color }}1a, {{ subject_data.color }}0d); border: 2px solid {{ subject_data.color }}33;">
+    <div class="card-body">
+        <h3 class="card-title mb-3">
+            <i data-feather="settings" class="me-2"></i>
+            Customize Your Learning Experience
+        </h3>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Session Length:</label>
+                <select id="session-length" class="form-select">
+                    <option value="5">Quick Review (5 questions)</option>
+                    <option value="10" selected>Standard (10 questions)</option>
+                    <option value="15">Extended (15 questions)</option>
+                    <option value="20">Deep Study (20 questions)</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Starting Level:</label>
+                <select id="difficulty-level" class="form-select">
+                    <option value="foundation" selected>Foundation</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="expert">Expert</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Learning Focus:</label>
+                <select id="learning-focus" class="form-select">
+                    <option value="comprehensive" selected>Comprehensive</option>
+                    <option value="practical">Practical Applications</option>
+                    <option value="theoretical">Theoretical Depth</option>
+                    <option value="review">Review & Reinforcement</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Pace:</label>
+                <select id="learning-pace" class="form-select">
+                    <option value="self-paced" selected>Self-Paced</option>
+                    <option value="structured">Structured Progress</option>
+                    <option value="intensive">Intensive Study</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Available Topics -->
+<section>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i data-feather="book" class="me-2"></i>
+            Available Topics
+        </h2>
+        <div class="d-flex gap-2">
+            <span class="badge" style="background-color: {{ subject_data.color }}33; color: {{ subject_data.color }};">
+                {{ subject_data.topics|length }} Topics Available
+            </span>
+        </div>
+    </div>
+    
+    {% if subject_data.topics %}
+    <div class="topics-grid">
+        {% for topic_key, topic_data in subject_data.topics.items() %}
+        <div class="topic-card">
+            <div class="topic-header">
+                <h3 class="topic-title">{{ topic_data.name }}</h3>
+                <div class="topic-meta">
+                    <span class="estimated-time">
+                        <i data-feather="clock" style="width: 14px; height: 14px;"></i>
+                        ~{{ topic_data.estimated_hours }} hours
+                    </span>
+                </div>
+            </div>
+            
+            <div class="subtopics-list">
+                <h5 class="subtopics-title">You'll Learn:</h5>
+                {% for subtopic in topic_data.subtopics[:4] %}
+                <div class="subtopic-item">
+                    <i data-feather="check-circle" style="width: 14px; height: 14px; color: {{ subject_data.color }};"></i>
+                    {{ subtopic }}
+                </div>
+                {% endfor %}
+                {% if topic_data.subtopics|length > 4 %}
+                <div class="subtopic-item more-subtopics">
+                    <i data-feather="plus" style="width: 14px; height: 14px;"></i>
+                    +{{ topic_data.subtopics|length - 4 }} more areas
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="difficulty-levels">
+                <h6 class="levels-title">Available Levels:</h6>
+                <div class="levels-list">
+                    {% for level in topic_data.difficulty_levels %}
+                    <span class="level-badge level-{{ level }}">{{ level.title() }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="topic-actions">
+                <button class="btn btn-primary w-100" onclick="startLearning('{{ category }}', '{{ topic_key }}')">
+                    <i data-feather="play" class="me-2" style="width: 16px; height: 16px;"></i>
+                    Start Learning
+                </button>
+                <div class="quick-actions mt-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="viewProgress('{{ category }}', '{{ topic_key }}')">
+                        <i data-feather="trending-up" style="width: 14px; height: 14px;"></i>
+                        Progress
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="viewLeaderboard('{{ category }}', '{{ topic_key }}')">
+                        <i data-feather="users" style="width: 14px; height: 14px;"></i>
+                        Leaderboard
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i data-feather="book-open" style="width: 64px; height: 64px; color: hsl(var(--text-muted)); margin-bottom: 1rem;"></i>
+        <h3 style="color: hsl(var(--text-secondary));">No Topics Available</h3>
+        <p style="color: hsl(var(--text-muted));">
+            Topics for this subject are being prepared.
+        </p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Learning Tips -->
+<section class="mt-5">
+    <div class="card" style="border: 2px solid {{ subject_data.color }}33; background: {{ subject_data.color }}0d;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">
+                <i data-feather="lightbulb" class="me-2" style="color: {{ subject_data.color }};"></i>
+                Learning Tips for {{ subject_data.name }}
+            </h3>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="target" class="me-3 mt-1" style="color: {{ subject_data.color }}; width: 20px; height: 20px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Start with foundations</h5>
+                            <p class="mb-0 small" style="color: hsl(var(--text-secondary));">
+                                Build strong basics before advancing to complex topics
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="repeat" class="me-3 mt-1" style="color: {{ subject_data.color }}; width: 20px; height: 20px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Practice regularly</h5>
+                            <p class="mb-0 small" style="color: hsl(var(--text-secondary));">
+                                Consistent short sessions beat long cramming sessions
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="link" class="me-3 mt-1" style="color: {{ subject_data.color }}; width: 20px; height: 20px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Connect concepts</h5>
+                            <p class="mb-0 small" style="color: hsl(var(--text-secondary));">
+                                Look for relationships between different topics
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="zap" class="me-3 mt-1" style="color: {{ subject_data.color }}; width: 20px; height: 20px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Apply practically</h5>
+                            <p class="mb-0 small" style="color: hsl(var(--text-secondary));">
+                                Use real-world examples to reinforce learning
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block styles %}
+<style>
+.topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.topic-card {
+    background: hsl(var(--surface));
+    border: 2px solid hsl(var(--surface-alt));
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.topic-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: {{ subject_data.color }};
+}
+
+.topic-header {
+    margin-bottom: 1.5rem;
+}
+
+.topic-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+    margin-bottom: 0.5rem;
+}
+
+.topic-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.estimated-time {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+}
+
+.subtopics-list {
+    margin-bottom: 1.5rem;
+}
+
+.subtopics-title {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+    margin-bottom: 0.75rem;
+}
+
+.subtopic-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+}
+
+.more-subtopics {
+    color: {{ subject_data.color }};
+    font-style: italic;
+}
+
+.difficulty-levels {
+    margin-bottom: 1.5rem;
+}
+
+.levels-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+    margin-bottom: 0.5rem;
+}
+
+.levels-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.level-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.level-foundation {
+    background-color: hsl(var(--secondary-color) / 0.2);
+    color: hsl(var(--secondary-color));
+}
+
+.level-intermediate {
+    background-color: hsl(var(--warning-color) / 0.2);
+    color: hsl(var(--warning-color));
+}
+
+.level-advanced {
+    background-color: hsl(var(--accent-color) / 0.2);
+    color: hsl(var(--accent-color));
+}
+
+.level-expert {
+    background-color: hsl(var(--danger-color) / 0.2);
+    color: hsl(var(--danger-color));
+}
+
+.topic-actions {
+    margin-top: auto;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
+    
+    // Load saved preferences
+    const preferences = ['session-length', 'difficulty-level', 'learning-focus', 'learning-pace'];
+    preferences.forEach(pref => {
+        const element = document.getElementById(pref);
+        const saved = localStorage.getItem(pref);
+        if (saved && element) {
+            element.value = saved;
+        }
+        
+        if (element) {
+            element.addEventListener('change', function() {
+                localStorage.setItem(pref, element.value);
+            });
+        }
+    });
+    
+    // Animate topic cards
+    const cards = document.querySelectorAll('.topic-card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.animation = 'slideInUp 0.6s ease-out both';
+    });
+});
+
+function startLearning(category, topic) {
+    const sessionLength = document.getElementById('session-length').value;
+    const difficulty = document.getElementById('difficulty-level').value;
+    const focus = document.getElementById('learning-focus').value;
+    
+    // Store learning preferences
+    localStorage.setItem('current-focus', focus);
+    
+    window.location.href = `/learn/${category}/${topic}/${difficulty}/${sessionLength}`;
+}
+
+function viewProgress(category, topic) {
+    window.location.href = `/profile#${category}-${topic}`;
+}
+
+function viewLeaderboard(category, topic) {
+    window.location.href = `/leaderboard/${category}/${topic}`;
+}
+</script>
+{% endblock %}

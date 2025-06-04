@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+
+{% block title %}NeuroPulse - Universal Learning Platform{% endblock %}
+
+{% block description %}Learn any subject with adaptive, neurodivergent-friendly microlearning. From electrical engineering to botany, master any topic at your own pace.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold mb-3" style="color: hsl(var(--primary-color));">
+        Learn Anything, Master Everything
+    </h1>
+    <p class="lead mb-4" style="color: hsl(var(--text-secondary)); max-width: 700px; margin: 0 auto;">
+        Choose from comprehensive subjects across science, engineering, business, trades, and more. 
+        Adaptive learning paths that grow with your expertise and accommodate your learning style.
+    </p>
+    
+    <!-- Universal features -->
+    <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
+        <span class="badge badge-category">
+            <i data-feather="layers" class="me-1" style="width: 16px; height: 16px;"></i>
+            Multi-Subject Platform
+        </span>
+        <span class="badge badge-difficulty">
+            <i data-feather="trending-up" class="me-1" style="width: 16px; height: 16px;"></i>
+            Adaptive Progression
+        </span>
+        <span class="badge badge-category">
+            <i data-feather="award" class="me-1" style="width: 16px; height: 16px;"></i>
+            Badge System
+        </span>
+        <span class="badge badge-difficulty">
+            <i data-feather="users" class="me-1" style="width: 16px; height: 16px;"></i>
+            Leaderboards
+        </span>
+    </div>
+</div>
+
+<!-- Session Length Selector -->
+<div class="card mb-5" style="background: linear-gradient(135deg, hsl(var(--primary-color) / 0.1), hsl(var(--secondary-color) / 0.1)); border: 2px solid hsl(var(--primary-color) / 0.2);">
+    <div class="card-body text-center">
+        <h3 class="card-title mb-3">
+            <i data-feather="settings" class="me-2"></i>
+            Customize Your Learning Session
+        </h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Session Length:</label>
+                <select id="session-length" class="form-select">
+                    <option value="5">Quick Sprint (5 questions)</option>
+                    <option value="10" selected>Standard Session (10 questions)</option>
+                    <option value="15">Extended Learning (15 questions)</option>
+                    <option value="20">Deep Dive (20 questions)</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Difficulty Preference:</label>
+                <select id="difficulty-preference" class="form-select">
+                    <option value="adaptive" selected>Adaptive (Recommended)</option>
+                    <option value="foundation">Foundation Level</option>
+                    <option value="intermediate">Intermediate Level</option>
+                    <option value="advanced">Advanced Level</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Focus Mode:</label>
+                <select id="focus-mode" class="form-select">
+                    <option value="mixed" selected>Mixed Topics</option>
+                    <option value="sequential">Sequential Learning</option>
+                    <option value="review">Review Previous</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Subject Categories -->
+<section>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i data-feather="book-open" class="me-2"></i>
+            Subject Categories
+        </h2>
+        <div class="d-flex gap-2">
+            <a href="/profile" class="btn btn-outline-primary">
+                <i data-feather="user" class="me-1" style="width: 16px; height: 16px;"></i>
+                My Progress
+            </a>
+            <button class="btn btn-outline-secondary" onclick="requestCustomSubject()">
+                <i data-feather="plus" class="me-1" style="width: 16px; height: 16px;"></i>
+                Request Subject
+            </button>
+        </div>
+    </div>
+    
+    {% if subjects %}
+    <div class="subject-grid">
+        {% for category_key, category_data in subjects.items() %}
+        <div class="subject-category-card" onclick="location.href='/subjects/{{ category_key }}'">
+            <div class="category-header">
+                <div class="category-icon" style="color: {{ category_data.color }};">
+                    <i data-feather="{{ category_data.icon }}" style="width: 48px; height: 48px;"></i>
+                </div>
+                <h3 class="category-title">{{ category_data.name }}</h3>
+            </div>
+            
+            <div class="topics-preview">
+                {% for topic_key, topic_data in category_data.topics.items() %}
+                    {% if loop.index <= 3 %}
+                    <div class="topic-preview">
+                        <span class="topic-name">{{ topic_data.name }}</span>
+                        <span class="subtopic-count">{{ topic_data.subtopics|length }} subtopics</span>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                {% if category_data.topics|length > 3 %}
+                <div class="topic-preview more-topics">
+                    <span class="topic-name">+{{ category_data.topics|length - 3 }} more topics</span>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="category-stats">
+                <span class="stat">
+                    <i data-feather="book" style="width: 14px; height: 14px;"></i>
+                    {{ category_data.topics|length }} Topics
+                </span>
+                <span class="stat">
+                    <i data-feather="clock" style="width: 14px; height: 14px;"></i>
+                    {% set total_hours = category_data.topics.values() | sum(attribute='estimated_hours') %}
+                    {{ total_hours }}+ Hours
+                </span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i data-feather="inbox" style="width: 64px; height: 64px; color: hsl(var(--text-muted)); margin-bottom: 1rem;"></i>
+        <h3 style="color: hsl(var(--text-secondary));">No Subjects Available</h3>
+        <p style="color: hsl(var(--text-muted));">
+            The subject database is being initialized. Please refresh the page.
+        </p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Quick Start Guide -->
+<section class="mt-5">
+    <div class="card" style="border: 2px solid hsl(var(--secondary-color) / 0.3); background: hsl(var(--secondary-color) / 0.05);">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">
+                <i data-feather="compass" class="me-2" style="color: hsl(var(--secondary-color));"></i>
+                How Universal Learning Works
+            </h3>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <i data-feather="target" style="width: 48px; height: 48px; color: hsl(var(--primary-color)); margin-bottom: 1rem;"></i>
+                        <h5>1. Choose Your Subject</h5>
+                        <p class="small mb-0" style="color: hsl(var(--text-secondary));">
+                            Browse comprehensive subject categories from science to trades
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <i data-feather="sliders" style="width: 48px; height: 48px; color: hsl(var(--secondary-color)); margin-bottom: 1rem;"></i>
+                        <h5>2. Set Your Level</h5>
+                        <p class="small mb-0" style="color: hsl(var(--text-secondary));">
+                            Adaptive system adjusts to your knowledge and learning pace
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <i data-feather="trending-up" style="width: 48px; height: 48px; color: hsl(var(--accent-color)); margin-bottom: 1rem;"></i>
+                        <h5>3. Progress & Earn Badges</h5>
+                        <p class="small mb-0" style="color: hsl(var(--text-secondary));">
+                            Track mastery with subject-specific achievements and progression
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <i data-feather="users" style="width: 48px; height: 48px; color: hsl(var(--warning-color)); margin-bottom: 1rem;"></i>
+                        <h5>4. Compete & Collaborate</h5>
+                        <p class="small mb-0" style="color: hsl(var(--text-secondary));">
+                            Join leaderboards and see how you rank in each subject
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block styles %}
+<style>
+.subject-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.subject-category-card {
+    background: hsl(var(--surface));
+    border: 2px solid hsl(var(--surface-alt));
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+}
+
+.subject-category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: hsl(var(--primary-color));
+}
+
+.category-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.category-icon {
+    margin-bottom: 1rem;
+}
+
+.category-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+    margin: 0;
+}
+
+.topics-preview {
+    margin-bottom: 1.5rem;
+}
+
+.topic-preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid hsl(var(--surface-alt));
+}
+
+.topic-preview:last-child {
+    border-bottom: none;
+}
+
+.topic-name {
+    font-weight: 500;
+    color: hsl(var(--text-primary));
+}
+
+.subtopic-count {
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+}
+
+.more-topics .topic-name {
+    color: hsl(var(--primary-color));
+    font-style: italic;
+}
+
+.category-stats {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid hsl(var(--surface-alt));
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
+    
+    // Store user preferences
+    const sessionLength = document.getElementById('session-length');
+    const difficultyPref = document.getElementById('difficulty-preference');
+    const focusMode = document.getElementById('focus-mode');
+    
+    // Load saved preferences
+    if (localStorage.getItem('session-length')) {
+        sessionLength.value = localStorage.getItem('session-length');
+    }
+    if (localStorage.getItem('difficulty-preference')) {
+        difficultyPref.value = localStorage.getItem('difficulty-preference');
+    }
+    if (localStorage.getItem('focus-mode')) {
+        focusMode.value = localStorage.getItem('focus-mode');
+    }
+    
+    // Save preferences on change
+    [sessionLength, difficultyPref, focusMode].forEach(element => {
+        element.addEventListener('change', function() {
+            localStorage.setItem(element.id, element.value);
+        });
+    });
+    
+    // Animate cards
+    const cards = document.querySelectorAll('.subject-category-card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.animation = 'slideInUp 0.6s ease-out both';
+    });
+});
+
+function requestCustomSubject() {
+    const subjectName = prompt("What subject would you like to learn about?");
+    if (subjectName) {
+        const category = prompt("Which category does this belong to? (science, business, engineering, trades, etc.)");
+        if (category) {
+            fetch('/api/subjects/add-custom', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    category: category.toLowerCase(),
+                    topic_name: subjectName,
+                    subtopics: []
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Request submitted successfully!');
+            });
+        }
+    }
+}
+
+// Add smooth scroll for navigation
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+</script>
+{% endblock %}

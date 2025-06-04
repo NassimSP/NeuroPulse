@@ -1,0 +1,537 @@
+{% extends "base.html" %}
+
+{% block title %}Learning {{ topic_details.name }} - NeuroPulse{% endblock %}
+
+{% block description %}Adaptive {{ difficulty }} level learning session for {{ topic_details.name }}{% endblock %}
+
+{% block content %}
+<!-- Session Header -->
+<div class="session-header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="session-info">
+            <h1 class="session-title">{{ topic_details.name }}</h1>
+            <div class="session-meta">
+                <span class="difficulty-badge difficulty-{{ difficulty }}">{{ difficulty.title() }} Level</span>
+                <span class="session-length">{{ session_length }} Questions</span>
+                <span class="category-badge">{{ category.replace('_', ' ').title() }}</span>
+            </div>
+        </div>
+        <div class="session-controls">
+            <button class="btn btn-outline-secondary" onclick="pauseSession()">
+                <i data-feather="pause"></i>
+                Pause
+            </button>
+            <button class="btn btn-outline-danger" onclick="exitSession()">
+                <i data-feather="x"></i>
+                Exit
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-container mb-4">
+    <div class="progress-header">
+        <span class="progress-text">Question <span id="current-question">1</span> of {{ session_length }}</span>
+        <span class="progress-percentage">0%</span>
+    </div>
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+</div>
+
+<!-- Question Container -->
+<div class="question-container">
+    <div id="loading-state" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading question...</span>
+        </div>
+        <p class="mt-3">Generating your personalized question...</p>
+    </div>
+    
+    <div id="question-content" class="d-none">
+        <!-- Question will be dynamically loaded here -->
+    </div>
+</div>
+
+<!-- Confidence Slider -->
+<div class="confidence-section mt-4 d-none" id="confidence-section">
+    <label class="form-label fw-semibold">How confident are you in your answer?</label>
+    <div class="confidence-slider-container">
+        <input type="range" class="form-range" id="confidence-slider" min="1" max="5" value="3">
+        <div class="confidence-labels">
+            <span>Not Sure</span>
+            <span>Somewhat</span>
+            <span>Confident</span>
+            <span>Very Sure</span>
+            <span>Certain</span>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons mt-4">
+    <button id="submit-btn" class="btn btn-primary btn-lg w-100 d-none" onclick="submitAnswer()">
+        <i data-feather="send"></i>
+        Submit Answer
+    </button>
+    
+    <button id="next-btn" class="btn btn-success btn-lg w-100 d-none" onclick="nextQuestion()">
+        <i data-feather="arrow-right"></i>
+        Next Question
+    </button>
+    
+    <button id="results-btn" class="btn btn-warning btn-lg w-100 d-none" onclick="viewResults()">
+        <i data-feather="award"></i>
+        View Results
+    </button>
+</div>
+
+<!-- Feedback Section -->
+<div id="feedback-section" class="feedback-section mt-4 d-none">
+    <!-- Feedback will be shown here -->
+</div>
+
+<!-- Session Stats -->
+<div class="session-stats mt-4">
+    <div class="row text-center">
+        <div class="col-4">
+            <div class="stat-item">
+                <div class="stat-value" id="correct-count">0</div>
+                <div class="stat-label">Correct</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="stat-item">
+                <div class="stat-value" id="streak-count">0</div>
+                <div class="stat-label">Streak</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="stat-item">
+                <div class="stat-value" id="avg-confidence">3.0</div>
+                <div class="stat-label">Avg Confidence</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+.session-header {
+    background: linear-gradient(135deg, hsl(var(--primary-color) / 0.1), hsl(var(--secondary-color) / 0.05));
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    border: 2px solid hsl(var(--primary-color) / 0.2);
+}
+
+.session-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: hsl(var(--text-primary));
+    margin: 0;
+}
+
+.session-meta {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.difficulty-badge, .session-length, .category-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.difficulty-foundation {
+    background-color: hsl(var(--secondary-color) / 0.2);
+    color: hsl(var(--secondary-color));
+}
+
+.difficulty-intermediate {
+    background-color: hsl(var(--warning-color) / 0.2);
+    color: hsl(var(--warning-color));
+}
+
+.difficulty-advanced {
+    background-color: hsl(var(--accent-color) / 0.2);
+    color: hsl(var(--accent-color));
+}
+
+.difficulty-expert {
+    background-color: hsl(var(--danger-color) / 0.2);
+    color: hsl(var(--danger-color));
+}
+
+.session-length {
+    background-color: hsl(var(--primary-color) / 0.2);
+    color: hsl(var(--primary-color));
+}
+
+.category-badge {
+    background-color: hsl(var(--text-secondary) / 0.2);
+    color: hsl(var(--text-secondary));
+}
+
+.progress-container {
+    background: hsl(var(--surface));
+    padding: 1.5rem;
+    border-radius: var(--border-radius-md);
+    border: 1px solid hsl(var(--surface-alt));
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.progress-text {
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+}
+
+.progress-percentage {
+    font-weight: 500;
+    color: hsl(var(--primary-color));
+}
+
+.question-container {
+    background: hsl(var(--surface));
+    padding: 2.5rem;
+    border-radius: var(--border-radius-lg);
+    border: 2px solid hsl(var(--surface-alt));
+    min-height: 300px;
+}
+
+.question-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.answer-options {
+    display: grid;
+    gap: 1rem;
+}
+
+.option-btn {
+    background: hsl(var(--surface));
+    border: 2px solid hsl(var(--surface-alt));
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+    text-align: left;
+    transition: all var(--transition-fast);
+    font-size: 1rem;
+    color: hsl(var(--text-primary));
+}
+
+.option-btn:hover {
+    border-color: hsl(var(--primary-color));
+    background: hsl(var(--primary-color) / 0.05);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.option-btn.selected {
+    border-color: hsl(var(--primary-color));
+    background: hsl(var(--primary-color) / 0.1);
+    color: hsl(var(--primary-color));
+}
+
+.confidence-section {
+    background: hsl(var(--surface));
+    padding: 2rem;
+    border-radius: var(--border-radius-md);
+    border: 1px solid hsl(var(--surface-alt));
+}
+
+.confidence-slider-container {
+    margin-top: 1rem;
+}
+
+.confidence-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+}
+
+.feedback-section {
+    background: hsl(var(--surface));
+    padding: 2rem;
+    border-radius: var(--border-radius-md);
+    border: 2px solid hsl(var(--secondary-color) / 0.3);
+}
+
+.feedback-correct {
+    border-color: hsl(var(--secondary-color));
+    background: hsl(var(--secondary-color) / 0.05);
+}
+
+.feedback-incorrect {
+    border-color: hsl(var(--danger-color));
+    background: hsl(var(--danger-color) / 0.05);
+}
+
+.session-stats {
+    background: hsl(var(--surface-alt) / 0.5);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-md);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: hsl(var(--primary-color));
+}
+
+.stat-label {
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+    margin-top: 0.25rem;
+}
+
+.celebration {
+    animation: celebration 0.6s ease-out;
+}
+
+@keyframes celebration {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentQuestion = 0;
+let sessionLength = {{ session_length }};
+let selectedAnswer = null;
+let sessionStats = {
+    correct: 0,
+    streak: 0,
+    totalConfidence: 0,
+    answers: []
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
+    loadFirstQuestion();
+});
+
+async function loadFirstQuestion() {
+    await loadQuestion();
+}
+
+async function loadQuestion() {
+    document.getElementById('loading-state').classList.remove('d-none');
+    document.getElementById('question-content').classList.add('d-none');
+    document.getElementById('confidence-section').classList.add('d-none');
+    document.getElementById('submit-btn').classList.add('d-none');
+    
+    try {
+        const response = await fetch('/api/learning/generate-question', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                question_number: currentQuestion
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.question) {
+            displayQuestion(data.question);
+            updateProgress(data.question_number, data.total_questions);
+        } else {
+            showError('Unable to load question. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error loading question:', error);
+        showError('Connection error. Please check your internet connection.');
+    }
+    
+    document.getElementById('loading-state').classList.add('d-none');
+}
+
+function displayQuestion(questionData) {
+    const questionHtml = `
+        <div class="question-text">${questionData.question}</div>
+        <div class="answer-options">
+            ${questionData.options.map((option, index) => `
+                <button class="option-btn" onclick="selectAnswer('${option}', this)">
+                    ${option}
+                </button>
+            `).join('')}
+        </div>
+    `;
+    
+    document.getElementById('question-content').innerHTML = questionHtml;
+    document.getElementById('question-content').classList.remove('d-none');
+    document.getElementById('confidence-section').classList.remove('d-none');
+    
+    // Store current question data
+    window.currentQuestionData = questionData;
+    selectedAnswer = null;
+}
+
+function selectAnswer(answer, buttonElement) {
+    // Remove previous selection
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Mark current selection
+    buttonElement.classList.add('selected');
+    selectedAnswer = answer;
+    
+    // Show submit button
+    document.getElementById('submit-btn').classList.remove('d-none');
+}
+
+async function submitAnswer() {
+    if (!selectedAnswer) {
+        alert('Please select an answer before submitting.');
+        return;
+    }
+    
+    const confidence = document.getElementById('confidence-slider').value;
+    
+    try {
+        const response = await fetch('/api/learning/submit-answer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                answer: selectedAnswer,
+                confidence: parseInt(confidence),
+                question_data: window.currentQuestionData
+            })
+        });
+        
+        const result = await response.json();
+        showFeedback(result);
+        updateSessionStats(result);
+        
+        document.getElementById('submit-btn').classList.add('d-none');
+        
+        if (result.is_complete) {
+            document.getElementById('results-btn').classList.remove('d-none');
+        } else {
+            document.getElementById('next-btn').classList.remove('d-none');
+        }
+        
+    } catch (error) {
+        console.error('Error submitting answer:', error);
+        showError('Unable to submit answer. Please try again.');
+    }
+}
+
+function showFeedback(result) {
+    const feedbackHtml = `
+        <div class="feedback-content">
+            <div class="feedback-header">
+                <h4 class="${result.is_correct ? 'text-success' : 'text-danger'}">
+                    <i data-feather="${result.is_correct ? 'check-circle' : 'x-circle'}" class="me-2"></i>
+                    ${result.is_correct ? 'Correct!' : 'Not quite right'}
+                </h4>
+            </div>
+            <div class="feedback-explanation">
+                <p><strong>Explanation:</strong> ${result.explanation}</p>
+                ${result.aha_moment ? `<p class="aha-moment"><strong>💡 Aha Moment:</strong> ${result.aha_moment}</p>` : ''}
+                ${!result.is_correct ? `<p><strong>Correct Answer:</strong> ${result.correct_answer}</p>` : ''}
+            </div>
+            ${result.celebration ? `<div class="celebration-message">${result.celebration_message}</div>` : ''}
+        </div>
+    `;
+    
+    const feedbackSection = document.getElementById('feedback-section');
+    feedbackSection.innerHTML = feedbackHtml;
+    feedbackSection.className = `feedback-section mt-4 ${result.is_correct ? 'feedback-correct' : 'feedback-incorrect'}`;
+    feedbackSection.classList.remove('d-none');
+    
+    feather.replace();
+    
+    if (result.celebration) {
+        feedbackSection.classList.add('celebration');
+    }
+}
+
+function updateSessionStats(result) {
+    if (result.is_correct) {
+        sessionStats.correct++;
+        sessionStats.streak = result.streak_count || 0;
+    } else {
+        sessionStats.streak = 0;
+    }
+    
+    sessionStats.totalConfidence += parseInt(document.getElementById('confidence-slider').value);
+    sessionStats.answers.push(result);
+    
+    document.getElementById('correct-count').textContent = sessionStats.correct;
+    document.getElementById('streak-count').textContent = sessionStats.streak;
+    document.getElementById('avg-confidence').textContent = (sessionStats.totalConfidence / sessionStats.answers.length).toFixed(1);
+}
+
+function updateProgress(questionNum, total) {
+    const percentage = (questionNum / total) * 100;
+    document.getElementById('current-question').textContent = questionNum;
+    document.querySelector('.progress-percentage').textContent = Math.round(percentage) + '%';
+    document.querySelector('.progress-bar').style.width = percentage + '%';
+    document.querySelector('.progress-bar').setAttribute('aria-valuenow', percentage);
+}
+
+async function nextQuestion() {
+    currentQuestion++;
+    document.getElementById('next-btn').classList.add('d-none');
+    document.getElementById('feedback-section').classList.add('d-none');
+    document.getElementById('confidence-slider').value = 3;
+    await loadQuestion();
+}
+
+function viewResults() {
+    window.location.href = document.getElementById('results-btn').getAttribute('data-results-url') || '/profile';
+}
+
+function pauseSession() {
+    if (confirm('Are you sure you want to pause this session? Your progress will be saved.')) {
+        window.location.href = '/profile';
+    }
+}
+
+function exitSession() {
+    if (confirm('Are you sure you want to exit? Your progress will be saved but this session will end.')) {
+        window.location.href = '/subjects';
+    }
+}
+
+function showError(message) {
+    const errorHtml = `
+        <div class="alert alert-danger">
+            <i data-feather="alert-circle" class="me-2"></i>
+            ${message}
+        </div>
+    `;
+    document.getElementById('question-content').innerHTML = errorHtml;
+    document.getElementById('question-content').classList.remove('d-none');
+    feather.replace();
+}
+</script>
+{% endblock %}

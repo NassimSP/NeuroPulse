@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Journey Map - NeuroPulse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .journey-header {
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .subject-selector {
+            margin-bottom: 2rem;
+        }
+
+        .subject-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .subject-card:hover, .subject-card.active {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .journey-map {
+            position: relative;
+            padding: 2rem;
+            min-height: 600px;
+        }
+
+        .level-container {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .level-header {
+            background: var(--primary-gradient);
+            border-radius: 15px;
+            padding: 1.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .level-header.completed {
+            background: var(--success-gradient);
+        }
+
+        .level-header.current {
+            background: var(--info-gradient);
+            animation: pulse 2s infinite;
+        }
+
+        .level-header.locked {
+            background: linear-gradient(135deg, #8e8e93 0%, #c4c4c4 100%);
+            opacity: 0.6;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+            50% { box-shadow: 0 8px 40px rgba(79, 172, 254, 0.3); }
+            100% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+        }
+
+        .milestone-path {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .milestone-connector {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #e0e0e0 0%, #b0b0b0 100%);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .milestone-connector.completed {
+            background: var(--success-gradient);
+        }
+
+        .milestone-connector.current {
+            background: linear-gradient(90deg, var(--success-gradient) 0%, var(--info-gradient) 100%);
+        }
+
+        .milestone {
+            position: relative;
+            z-index: 2;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 4px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .milestone.completed {
+            border-color: #38ef7d;
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .milestone.current {
+            border-color: #4facfe;
+            background: var(--info-gradient);
+            color: white;
+            animation: bounce 1s infinite alternate;
+        }
+
+        .milestone.locked {
+            border-color: #c4c4c4;
+            background: #f5f5f5;
+            color: #8e8e93;
+        }
+
+        @keyframes bounce {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .milestone-label {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-stats {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(15px);
+        }
+
+        .stat-item {
+            text-align: center;
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .progress-bar-custom {
+            height: 8px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success-gradient);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .achievement-badge {
+            display: inline-block;
+            background: var(--warning-gradient);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 0.25rem;
+            font-weight: 600;
+        }
+
+        .insights-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .insight-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .concept-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            margin: 0.2rem;
+        }
+
+        .next-milestone-card {
+            background: var(--info-gradient);
+            border-radius: 15px;
+            padding: 1.5rem;
+            color: white;
+            margin-top: 1rem;
+        }
+
+        .btn-custom {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .milestone-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            max-width: 250px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .level-progress {
+            margin-top: 1rem;
+        }
+
+        .xp-display {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: white;
+        }
+
+        .xp-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            height: 20px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .xp-fill {
+            height: 100%;
+            background: var(--success-gradient);
+            border-radius: 15px;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+
+        .xp-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem;
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .milestone-path {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .milestone-connector {
+                display: none;
+            }
+
+            .milestone {
+                margin-bottom: 2rem;
+            }
+
+            .journey-header {
+                padding: 1rem;
+            }
+
+            .progress-stats .row > div {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='/dashboard'">
+        <i class="fas fa-arrow-left"></i> Dashboard
+    </button>
+
+    <div class="container-fluid py-4">
+        <div class="glass-container">
+            <div class="journey-header">
+                <h1><i class="fas fa-map-marked-alt"></i> Learning Journey Map</h1>
+                <p class="mb-0">Track your progress through structured learning paths with visual milestones</p>
+            </div>
+
+            <!-- Subject Selector -->
+            <div class="subject-selector px-4">
+                <div class="row" id="subjectSelector">
+                    {% for subject in available_subjects %}
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="subject-card" data-subject="{{ subject.subject }}">
+                            <h5>{{ subject.subject }}</h5>
+                            <p class="mb-2">{{ subject.total_levels }} levels • {{ subject.total_milestones }} milestones</p>
+                            <small>{{ subject.estimated_completion_time.estimated_weeks }} weeks estimated</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Journey Content -->
+            <div class="journey-content px-4" style="display: none;">
+                <!-- Progress Overview -->
+                <div class="progress-stats">
+                    <div class="row">
+                        <div class="col-md-3 col-6">
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalXP">0</span>
+                                <span class="stat-label">Total XP</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stat-item">
+                                <span class="stat-value" id="currentLevel">1</span>
+                                <span class="stat-label">Current Level</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stat-item">
+                                <span class="stat-value" id="completionPercent">0%</span>
+                                <span class="stat-label">Completion</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stat-item">
+                                <span class="stat-value" id="currentStreak">0</span>
+                                <span class="stat-label">Day Streak</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-bar-custom mt-3">
+                        <div class="progress-fill" id="overallProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- XP Display -->
+                <div class="xp-display">
+                    <h6>Experience Points Progress</h6>
+                    <div class="d-flex justify-content-between">
+                        <span id="currentXP">0 XP</span>
+                        <span id="nextMilestoneXP">Next: 100 XP</span>
+                    </div>
+                    <div class="xp-bar">
+                        <div class="xp-fill" id="xpProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Journey Map -->
+                <div class="journey-map" id="journeyMap">
+                    <!-- Levels and milestones will be populated here -->
+                </div>
+
+                <!-- Next Milestone Card -->
+                <div class="next-milestone-card" id="nextMilestoneCard" style="display: none;">
+                    <h5><i class="fas fa-target"></i> Next Milestone</h5>
+                    <div id="nextMilestoneContent">
+                        <!-- Next milestone details -->
+                    </div>
+                </div>
+
+                <!-- Insights Panel -->
+                <div class="insights-panel">
+                    <h5><i class="fas fa-lightbulb"></i> Learning Insights</h5>
+                    <div id="insightsContent">
+                        <!-- Insights will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="text-center mt-4 mb-4">
+                    <button class="btn btn-custom me-3" onclick="startLearningSession()">
+                        <i class="fas fa-play"></i> Start Learning Session
+                    </button>
+                    <button class="btn btn-custom" onclick="viewDetailedAnalytics()">
+                        <i class="fas fa-chart-line"></i> Detailed Analytics
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading your learning journey...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Milestone Tooltip -->
+    <div class="milestone-tooltip" id="milestoneTooltip">
+        <div id="tooltipContent"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentSubject = null;
+        let journeyData = null;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            setupSubjectSelector();
+        });
+
+        function setupSubjectSelector() {
+            const subjectCards = document.querySelectorAll('.subject-card');
+            subjectCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const subject = this.dataset.subject;
+                    selectSubject(subject);
+                });
+            });
+        }
+
+        function selectSubject(subject) {
+            currentSubject = subject;
+            
+            // Update active state
+            document.querySelectorAll('.subject-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`[data-subject="${subject}"]`).classList.add('active');
+            
+            // Load journey data
+            loadJourneyData(subject);
+        }
+
+        async function loadJourneyData(subject) {
+            showLoading();
+            
+            try {
+                const response = await fetch(`/api/learning-journey/map?subject=${encodeURIComponent(subject)}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                journeyData = data;
+                renderJourneyMap(data);
+                hideLoading();
+                
+            } catch (error) {
+                console.error('Error loading journey data:', error);
+                hideLoading();
+                showError('Failed to load learning journey data. Please try again.');
+            }
+        }
+
+        function renderJourneyMap(data) {
+            // Update progress stats
+            updateProgressStats(data);
+            
+            // Render levels and milestones
+            renderLevels(data.levels);
+            
+            // Render next milestone
+            renderNextMilestone(data.next_milestone);
+            
+            // Render insights
+            renderInsights(data.progress_insights);
+            
+            // Show journey content
+            document.querySelector('.journey-content').style.display = 'block';
+        }
+
+        function updateProgressStats(data) {
+            const progress = data.user_progress;
+            
+            document.getElementById('totalXP').textContent = progress.total_xp.toLocaleString();
+            document.getElementById('currentLevel').textContent = progress.current_level + 1;
+            document.getElementById('completionPercent').textContent = progress.completion_percentage + '%';
+            document.getElementById('currentStreak').textContent = progress.streak;
+            
+            // Update progress bar
+            document.getElementById('overallProgress').style.width = progress.completion_percentage + '%';
+            
+            // Update XP progress
+            updateXPProgress(data);
+        }
+
+        function updateXPProgress(data) {
+            const currentXP = data.user_progress.total_xp;
+            const nextMilestone = data.next_milestone;
+            
+            document.getElementById('currentXP').textContent = currentXP.toLocaleString() + ' XP';
+            
+            if (nextMilestone) {
+                document.getElementById('nextMilestoneXP').textContent = 
+                    `Next: ${nextMilestone.xp_required.toLocaleString()} XP`;
+                
+                const progress = Math.min(100, (currentXP / nextMilestone.xp_required) * 100);
+                document.getElementById('xpProgress').style.width = progress + '%';
+            }
+        }
+
+        function renderLevels(levels) {
+            const journeyMap = document.getElementById('journeyMap');
+            journeyMap.innerHTML = '';
+            
+            levels.forEach((level, levelIndex) => {
+                const levelContainer = document.createElement('div');
+                levelContainer.className = 'level-container';
+                
+                // Level header
+                const levelHeader = document.createElement('div');
+                levelHeader.className = `level-header ${getLevelClass(level)}`;
+                levelHeader.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1">${level.name}</h4>
+                            <p class="mb-0 opacity-75">${level.description}</p>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-light text-dark">${level.milestones.length} milestones</span>
+                        </div>
+                    </div>
+                `;
+                
+                levelContainer.appendChild(levelHeader);
+                
+                // Milestones
+                const milestonesContainer = document.createElement('div');
+                renderMilestones(milestonesContainer, level.milestones, levelIndex);
+                levelContainer.appendChild(milestonesContainer);
+                
+                journeyMap.appendChild(levelContainer);
+            });
+        }
+
+        function renderMilestones(container, milestones, levelIndex) {
+            const milestonePath = document.createElement('div');
+            milestonePath.className = 'milestone-path';
+            
+            // Add connector
+            const connector = document.createElement('div');
+            connector.className = `milestone-connector ${getMilestoneConnectorClass(milestones)}`;
+            milestonePath.appendChild(connector);
+            
+            milestones.forEach((milestone, milestoneIndex) => {
+                const milestoneElement = document.createElement('div');
+                milestoneElement.className = `milestone ${getMilestoneClass(milestone)}`;
+                milestoneElement.innerHTML = getMilestoneIcon(milestone);
+                
+                // Add click handler
+                milestoneElement.addEventListener('click', () => showMilestoneDetails(milestone));
+                
+                // Add hover tooltip
+                milestoneElement.addEventListener('mouseenter', (e) => showTooltip(e, milestone));
+                milestoneElement.addEventListener('mouseleave', hideTooltip);
+                
+                // Milestone label
+                const label = document.createElement('div');
+                label.className = 'milestone-label';
+                label.textContent = milestone.name;
+                milestoneElement.appendChild(label);
+                
+                milestonePath.appendChild(milestoneElement);
+            });
+            
+            container.appendChild(milestonePath);
+        }
+
+        function getLevelClass(level) {
+            if (level.is_completed) return 'completed';
+            if (level.is_current) return 'current';
+            if (level.is_locked) return 'locked';
+            return '';
+        }
+
+        function getMilestoneClass(milestone) {
+            if (milestone.is_completed) return 'completed';
+            if (milestone.is_current) return 'current';
+            if (!milestone.is_accessible) return 'locked';
+            return '';
+        }
+
+        function getMilestoneConnectorClass(milestones) {
+            const completedCount = milestones.filter(m => m.is_completed).length;
+            if (completedCount === milestones.length) return 'completed';
+            if (completedCount > 0) return 'current';
+            return '';
+        }
+
+        function getMilestoneIcon(milestone) {
+            if (milestone.is_completed) return '<i class="fas fa-check"></i>';
+            if (milestone.is_current) return '<i class="fas fa-play"></i>';
+            if (milestone.type === 'foundation') return '<i class="fas fa-seedling"></i>';
+            if (milestone.type === 'mastery') return '<i class="fas fa-crown"></i>';
+            if (milestone.type === 'expertise') return '<i class="fas fa-star"></i>';
+            return '<i class="fas fa-circle"></i>';
+        }
+
+        function renderNextMilestone(nextMilestone) {
+            const card = document.getElementById('nextMilestoneCard');
+            const content = document.getElementById('nextMilestoneContent');
+            
+            if (nextMilestone) {
+                content.innerHTML = `
+                    <h6>${nextMilestone.name}</h6>
+                    <p class="mb-2">${nextMilestone.level}</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <small>XP Required: ${nextMilestone.xp_required.toLocaleString()}</small><br>
+                            <small>XP Needed: ${nextMilestone.xp_needed.toLocaleString()}</small>
+                        </div>
+                        <div class="col-md-6">
+                            <small>Progress: ${nextMilestone.progress_percentage}%</small><br>
+                            <small>Est. Sessions: ${nextMilestone.estimated_sessions}</small>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <h6>Concepts to Learn:</h6>
+                        ${nextMilestone.concepts.map(concept => 
+                            `<span class="concept-tag">${concept}</span>`
+                        ).join('')}
+                    </div>
+                `;
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        }
+
+        function renderInsights(insights) {
+            const content = document.getElementById('insightsContent');
+            content.innerHTML = insights.map(insight => 
+                `<div class="insight-item"><i class="fas fa-lightbulb me-2"></i>${insight}</div>`
+            ).join('');
+        }
+
+        function showTooltip(event, milestone) {
+            const tooltip = document.getElementById('milestoneTooltip');
+            const content = document.getElementById('tooltipContent');
+            
+            content.innerHTML = `
+                <strong>${milestone.name}</strong><br>
+                XP Required: ${milestone.xp_required.toLocaleString()}<br>
+                Progress: ${milestone.progress_percentage}%<br>
+                Type: ${milestone.type}<br>
+                <hr>
+                <strong>Concepts:</strong><br>
+                ${milestone.concepts.map(concept => `• ${concept}`).join('<br>')}
+            `;
+            
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY + 10 + 'px';
+            tooltip.style.display = 'block';
+        }
+
+        function hideTooltip() {
+            document.getElementById('milestoneTooltip').style.display = 'none';
+        }
+
+        function showMilestoneDetails(milestone) {
+            // Create modal or detailed view for milestone
+            alert(`Milestone: ${milestone.name}\nConcepts: ${milestone.concepts.join(', ')}`);
+        }
+
+        function startLearningSession() {
+            if (currentSubject) {
+                window.location.href = `/learn?subject=${encodeURIComponent(currentSubject)}`;
+            }
+        }
+
+        function viewDetailedAnalytics() {
+            window.location.href = '/analytics';
+        }
+
+        function showLoading() {
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.querySelector('.journey-content').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+
+        function showError(message) {
+            alert('Error: ' + message);
+        }
+
+        // Auto-refresh every 30 seconds if user is active
+        setInterval(() => {
+            if (currentSubject && document.visibilityState === 'visible') {
+                loadJourneyData(currentSubject);
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

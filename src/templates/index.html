@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}NeuroQuiz - Neurodivergent-Friendly Learning{% endblock %}
+
+{% block description %}Start your ADHD-friendly microlearning journey with bite-sized quizzes designed for better focus and retention{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold mb-3" style="color: hsl(var(--primary-color));">
+        Welcome to NeuroQuiz
+    </h1>
+    <p class="lead mb-4" style="color: hsl(var(--text-secondary)); max-width: 600px; margin: 0 auto;">
+        Microlearning designed for neurodivergent minds. Take bite-sized quizzes that boost focus, 
+        build confidence, and make learning enjoyable.
+    </p>
+    
+    <!-- Features badges -->
+    <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
+        <span class="badge badge-category">
+            <i data-feather="zap" class="me-1" style="width: 16px; height: 16px;"></i>
+            5-Question Cycles
+        </span>
+        <span class="badge badge-difficulty">
+            <i data-feather="heart" class="me-1" style="width: 16px; height: 16px;"></i>
+            ADHD-Optimized
+        </span>
+        <span class="badge badge-category">
+            <i data-feather="trending-up" class="me-1" style="width: 16px; height: 16px;"></i>
+            Progress Tracking
+        </span>
+        <span class="badge badge-difficulty">
+            <i data-feather="smile" class="me-1" style="width: 16px; height: 16px;"></i>
+            Engaging Design
+        </span>
+    </div>
+</div>
+
+<!-- Quick Start Info -->
+<div class="card mb-5" style="background: linear-gradient(135deg, hsl(var(--primary-color) / 0.1), hsl(var(--secondary-color) / 0.1)); border: 2px solid hsl(var(--primary-color) / 0.2);">
+    <div class="card-body text-center">
+        <h3 class="card-title mb-3">
+            <i data-feather="info" class="me-2"></i>
+            How NeuroQuiz Works
+        </h3>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <i data-feather="play-circle" style="width: 48px; height: 48px; color: hsl(var(--primary-color));"></i>
+                </div>
+                <h5>Choose a Quiz</h5>
+                <p class="small mb-0" style="color: hsl(var(--text-secondary));">
+                    Pick from our curated topics designed for neurodivergent learners
+                </p>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <i data-feather="target" style="width: 48px; height: 48px; color: hsl(var(--secondary-color));"></i>
+                </div>
+                <h5>Answer 5 Questions</h5>
+                <p class="small mb-0" style="color: hsl(var(--text-secondary));">
+                    Short, focused sessions prevent overwhelm and maintain attention
+                </p>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <i data-feather="sliders" style="width: 48px; height: 48px; color: hsl(var(--accent-color));"></i>
+                </div>
+                <h5>Rate Confidence</h5>
+                <p class="small mb-0" style="color: hsl(var(--text-secondary));">
+                    Track your certainty to build self-awareness and learning insights
+                </p>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <i data-feather="award" style="width: 48px; height: 48px; color: hsl(var(--warning-color));"></i>
+                </div>
+                <h5>Celebrate Success</h5>
+                <p class="small mb-0" style="color: hsl(var(--text-secondary));">
+                    Get instant feedback and dopamine-boosting celebrations
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Available Quizzes -->
+<section>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i data-feather="book-open" class="me-2"></i>
+            Available Quizzes
+        </h2>
+        <span class="badge badge-category">{{ quizzes|length }} Quiz{{ 's' if quizzes|length != 1 else '' }} Available</span>
+    </div>
+    
+    {% if quizzes %}
+    <div class="quiz-grid">
+        {% for quiz in quizzes %}
+        <div class="quiz-card">
+            <div class="quiz-meta mb-3">
+                <span class="badge badge-category">
+                    <i data-feather="folder" class="me-1" style="width: 14px; height: 14px;"></i>
+                    {{ quiz.category }}
+                </span>
+                <span class="badge badge-difficulty">
+                    <i data-feather="bar-chart" class="me-1" style="width: 14px; height: 14px;"></i>
+                    {{ quiz.difficulty }}
+                </span>
+                <span class="badge" style="background-color: hsl(var(--accent-color) / 0.1); color: hsl(var(--accent-color));">
+                    <i data-feather="clock" class="me-1" style="width: 14px; height: 14px;"></i>
+                    {{ quiz.questions|length }} Questions
+                </span>
+            </div>
+            
+            <h3 class="card-title">{{ quiz.title }}</h3>
+            <p class="card-subtitle mb-4">{{ quiz.description }}</p>
+            
+            <div class="difficulty-selector mb-3">
+                <p class="mb-2 fw-semibold" style="color: hsl(var(--text-primary));">Choose your level:</p>
+                <div class="btn-group w-100" role="group">
+                    <a href="{{ url_for('quiz', quiz_id=quiz.id, difficulty='beginner') }}" class="btn btn-outline-success">
+                        <i data-feather="play-circle" style="width: 16px; height: 16px;"></i>
+                        Beginner
+                    </a>
+                    <a href="{{ url_for('quiz', quiz_id=quiz.id, difficulty='intermediate') }}" class="btn btn-outline-warning">
+                        <i data-feather="zap" style="width: 16px; height: 16px;"></i>
+                        Intermediate
+                    </a>
+                    <a href="{{ url_for('quiz', quiz_id=quiz.id, difficulty='advanced') }}" class="btn btn-outline-danger">
+                        <i data-feather="target" style="width: 16px; height: 16px;"></i>
+                        Advanced
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i data-feather="inbox" style="width: 64px; height: 64px; color: hsl(var(--text-muted)); margin-bottom: 1rem;"></i>
+        <h3 style="color: hsl(var(--text-secondary));">No Quizzes Available</h3>
+        <p style="color: hsl(var(--text-muted));">
+            Check back soon for new neurodivergent-friendly learning content!
+        </p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Tips Section -->
+<section class="mt-5">
+    <div class="card" style="border: 2px solid hsl(var(--secondary-color) / 0.3); background: hsl(var(--secondary-color) / 0.05);">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">
+                <i data-feather="star" class="me-2" style="color: hsl(var(--secondary-color));"></i>
+                Tips for Success
+            </h3>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="check-circle" class="me-3 mt-1" style="color: hsl(var(--secondary-color)); width: 20px; height: 20px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Take breaks between quizzes</h5>
+                            <p class="mb-0 small" style="color: hsl(var(--text-secondary));">
+                                Give your brain time to process and avoid overwhelm
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="check-circle" class="me-3 mt-1" style="color: hsl(var(--secondary-color)); width: 20px; height: 20px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Trust your first instinct</h5>
+                            <p class="mb-0 small" style="color: hsl(var(--text-secondary));">
+                                Don't overthink - your initial response is often correct
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="check-circle" class="me-3 mt-1" style="color: hsl(var(--secondary-color)); width: 20px; height: 20px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Use confidence ratings honestly</h5>
+                            <p class="mb-0 small" style="color: hsl(var(--text-secondary));">
+                                This helps track your learning patterns and build self-awareness
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="check-circle" class="me-3 mt-1" style="color: hsl(var(--secondary-color)); width: 20px; height: 20px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Celebrate small wins</h5>
+                            <p class="mb-0 small" style="color: hsl(var(--text-secondary));">
+                                Every correct answer is progress - be proud of your growth!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Initialize Feather icons after dynamic content loads
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
+    
+    // Add subtle animations to quiz cards
+    const quizCards = document.querySelectorAll('.quiz-card');
+    quizCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.animation = 'slideInUp 0.6s ease-out both';
+    });
+});
+
+// Add localStorage check for returning users
+if (localStorage.getItem('quiz_progress')) {
+    const welcomeBack = document.createElement('div');
+    welcomeBack.className = 'alert alert-info mb-4';
+    welcomeBack.innerHTML = `
+        <i data-feather="refresh-cw" class="me-2"></i>
+        <strong>Welcome back!</strong> We found some saved progress. You can continue where you left off or start fresh.
+    `;
+    
+    const container = document.querySelector('.container');
+    if (container && container.children.length > 0) {
+        container.insertBefore(welcomeBack, container.children[0]);
+        feather.replace();
+    }
+}
+</script>
+{% endblock %}

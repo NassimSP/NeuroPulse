@@ -1,0 +1,421 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Results - {{ quiz.title }} - NeuroQuiz{% endblock %}
+
+{% block description %}View your results for the {{ quiz.title }} quiz{% endblock %}
+
+{% block content %}
+<div class="results-container">
+    <!-- Results Header -->
+    <div class="results-header">
+        <h1 class="display-4 fw-bold mb-3">
+            🎉 Quiz Complete!
+        </h1>
+        <h2 class="mb-4" style="color: hsl(var(--text-secondary));">{{ quiz.title }}</h2>
+    </div>
+    
+    <!-- Main Score Display -->
+    <div class="score-display text-center mb-5">
+        <div class="score-number">{{ score_percentage }}%</div>
+        <div class="score-label">{{ correct_count }} out of {{ total_questions }} correct</div>
+        
+        <!-- Performance Message -->
+        <div class="mt-3 p-3 rounded" style="background-color: rgba(255, 255, 255, 0.2);">
+            {% if score_percentage >= 80 %}
+                <h3 class="mb-2">Outstanding! 🌟</h3>
+                <p class="mb-0">You've mastered this topic. Your focus and attention paid off!</p>
+            {% elif score_percentage >= 60 %}
+                <h3 class="mb-2">Great Job! 💪</h3>
+                <p class="mb-0">You're well on your way to mastering this material. Keep it up!</p>
+            {% elif score_percentage >= 40 %}
+                <h3 class="mb-2">Good Effort! 👍</h3>
+                <p class="mb-0">You're learning! Review the explanations and try again when you're ready.</p>
+            {% else %}
+                <h3 class="mb-2">Keep Growing! 🌱</h3>
+                <p class="mb-0">Every attempt is progress. Review the content and come back stronger!</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Detailed Statistics -->
+    <div class="results-grid mb-5">
+        <div class="stat-card">
+            <div class="stat-number">{{ correct_count }}</div>
+            <div class="stat-label">
+                <i data-feather="check-circle" class="me-1" style="width: 16px; height: 16px; color: hsl(var(--secondary-color));"></i>
+                Correct Answers
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-number">{{ total_questions - correct_count }}</div>
+            <div class="stat-label">
+                <i data-feather="x-circle" class="me-1" style="width: 16px; height: 16px; color: hsl(var(--danger-color));"></i>
+                Incorrect Answers
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-number">{{ confidence_accuracy }}%</div>
+            <div class="stat-label">
+                <i data-feather="target" class="me-1" style="width: 16px; height: 16px; color: hsl(var(--primary-color));"></i>
+                Confidence Accuracy
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-number">{{ total_questions }}</div>
+            <div class="stat-label">
+                <i data-feather="list" class="me-1" style="width: 16px; height: 16px; color: hsl(var(--accent-color));"></i>
+                Total Questions
+            </div>
+        </div>
+    </div>
+    
+    <!-- Question-by-Question Breakdown -->
+    <div class="card mb-5">
+        <div class="card-header">
+            <h3 class="card-title mb-0">
+                <i data-feather="book-open" class="me-2"></i>
+                Question Breakdown
+            </h3>
+        </div>
+        <div class="card-body">
+            {% for answer in answers %}
+            <div class="question-review mb-4 {% if not loop.last %}border-bottom pb-4{% endif %}">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="mb-0">Question {{ answer.question_num + 1 }}</h5>
+                    <div class="d-flex gap-2">
+                        {% if answer.is_correct %}
+                        <span class="badge" style="background-color: hsl(var(--secondary-color)); color: white;">
+                            <i data-feather="check" class="me-1" style="width: 14px; height: 14px;"></i>
+                            Correct
+                        </span>
+                        {% else %}
+                        <span class="badge" style="background-color: hsl(var(--danger-color)); color: white;">
+                            <i data-feather="x" class="me-1" style="width: 14px; height: 14px;"></i>
+                            Incorrect
+                        </span>
+                        {% endif %}
+                        
+                        <span class="badge badge-category">
+                            <i data-feather="sliders" class="me-1" style="width: 14px; height: 14px;"></i>
+                            Confidence: {{ answer.confidence }}/5
+                        </span>
+                    </div>
+                </div>
+                
+                <p class="mb-3 fw-semibold">{{ quiz.questions[answer.question_num].question }}</p>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded" style="background-color: {% if answer.is_correct %}hsl(var(--secondary-color) / 0.1); border: 2px solid hsl(var(--secondary-color)){% else %}hsl(var(--danger-color) / 0.1); border: 2px solid hsl(var(--danger-color)){% endif %};">
+                            <strong>Your Answer:</strong><br>
+                            <span style="color: {% if answer.is_correct %}hsl(var(--secondary-color)){% else %}hsl(var(--danger-color)){% endif %};">{{ answer.selected_answer }}</span>
+                        </div>
+                    </div>
+                    {% if not answer.is_correct %}
+                    <div class="col-md-6">
+                        <div class="p-3 rounded" style="background-color: hsl(var(--secondary-color) / 0.1); border: 2px solid hsl(var(--secondary-color));">
+                            <strong>Correct Answer:</strong><br>
+                            <span style="color: hsl(var(--secondary-color));">{{ answer.correct_answer }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% if quiz.questions[answer.question_num].explanation %}
+                <div class="mt-3 p-3 rounded" style="background-color: hsl(var(--surface-alt));">
+                    <strong>
+                        <i data-feather="info" class="me-1" style="width: 16px; height: 16px;"></i>
+                        Explanation:
+                    </strong>
+                    <p class="mb-0 mt-2">{{ quiz.questions[answer.question_num].explanation }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Learning Insights -->
+    <div class="card mb-5" style="border: 2px solid hsl(var(--primary-color) / 0.3); background: hsl(var(--primary-color) / 0.05);">
+        <div class="card-body">
+            <h3 class="card-title mb-4">
+                <i data-feather="trending-up" class="me-2" style="color: hsl(var(--primary-color));"></i>
+                Your Learning Insights
+            </h3>
+            
+            <div class="row g-4">
+                {% set high_confidence_correct = answers | selectattr('confidence', 'ge', 4) | selectattr('is_correct', 'equalto', true) | list | length %}
+                {% set high_confidence_total = answers | selectattr('confidence', 'ge', 4) | list | length %}
+                {% set low_confidence_correct = answers | selectattr('confidence', 'le', 2) | selectattr('is_correct', 'equalto', true) | list | length %}
+                {% set low_confidence_total = answers | selectattr('confidence', 'le', 2) | list | length %}
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="thumbs-up" class="me-3 mt-1" style="color: hsl(var(--secondary-color)); width: 24px; height: 24px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Confidence & Accuracy</h5>
+                            {% if high_confidence_total > 0 %}
+                            <p class="mb-2">
+                                When you felt confident (4-5/5), you got {{ high_confidence_correct }} out of {{ high_confidence_total }} correct 
+                                ({{ ((high_confidence_correct / high_confidence_total) * 100) | round | int }}%).
+                            </p>
+                            {% endif %}
+                            {% if confidence_accuracy >= 70 %}
+                            <p class="mb-0 small text-success">✅ Your confidence is well-calibrated with your knowledge!</p>
+                            {% else %}
+                            <p class="mb-0 small text-warning">💡 Consider reviewing topics where you felt confident but answered incorrectly.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="cpu" class="me-3 mt-1" style="color: hsl(var(--primary-color)); width: 24px; height: 24px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Learning Pattern</h5>
+                            {% if score_percentage >= 80 %}
+                            <p class="mb-0">You demonstrate strong knowledge in this area. Consider exploring more advanced topics!</p>
+                            {% elif score_percentage >= 60 %}
+                            <p class="mb-0">You have a solid foundation. Focus on the areas where you felt less confident.</p>
+                            {% else %}
+                            <p class="mb-0">This is a growth opportunity! Review the explanations and try similar quizzes.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="target" class="me-3 mt-1" style="color: hsl(var(--accent-color)); width: 24px; height: 24px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">ADHD-Friendly Wins</h5>
+                            <p class="mb-0">You completed a focused 5-question session! This bite-sized approach helps maintain attention and reduces overwhelm.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <i data-feather="zap" class="me-3 mt-1" style="color: hsl(var(--warning-color)); width: 24px; height: 24px; flex-shrink: 0;"></i>
+                        <div>
+                            <h5 class="mb-2">Dopamine Boost</h5>
+                            <p class="mb-0">Every quiz completion is an achievement! You're building positive learning associations and momentum.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="text-center">
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="{{ url_for('quiz', quiz_id=quiz.id) }}" class="btn btn-primary btn-lg">
+                <i data-feather="refresh-cw" class="me-2"></i>
+                Retake Quiz
+            </a>
+            
+            <a href="{{ url_for('index') }}" class="btn btn-success btn-lg">
+                <i data-feather="home" class="me-2"></i>
+                Try Another Quiz
+            </a>
+            
+            <button onclick="shareResults()" class="btn btn-outline btn-lg">
+                <i data-feather="share-2" class="me-2"></i>
+                Share Results
+            </button>
+        </div>
+        
+        <div class="mt-4">
+            <button onclick="downloadProgress()" class="btn btn-warning">
+                <i data-feather="download" class="me-2"></i>
+                Download Progress Report
+            </button>
+        </div>
+    </div>
+    
+    <!-- Motivational Message -->
+    <div class="card mt-5 text-center" style="background: linear-gradient(135deg, hsl(var(--secondary-color) / 0.1), hsl(var(--primary-color) / 0.1)); border: 2px solid hsl(var(--secondary-color) / 0.3);">
+        <div class="card-body">
+            <h4 class="mb-3">
+                <i data-feather="heart" class="me-2" style="color: hsl(var(--secondary-color));"></i>
+                Remember
+            </h4>
+            <p class="lead mb-0" style="color: hsl(var(--text-primary));">
+                Learning is a journey, not a destination. Every question you answer, whether correct or incorrect, 
+                is building your knowledge and strengthening your neurodivergent superpowers! 🧠✨
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Feather icons
+    feather.replace();
+    
+    // Add celebration animation for high scores
+    const scorePercentage = {{ score_percentage }};
+    if (scorePercentage >= 80) {
+        createCelebrationEffect();
+    }
+    
+    // Save results to localStorage for progress tracking
+    const resultsData = {
+        quizId: {{ quiz.id }},
+        score: {{ score_percentage }},
+        correctCount: {{ correct_count }},
+        totalQuestions: {{ total_questions }},
+        confidenceAccuracy: {{ confidence_accuracy }},
+        completedAt: new Date().toISOString(),
+        answers: {{ answers | tojson | safe }}
+    };
+    
+    // Get existing results
+    let allResults = JSON.parse(localStorage.getItem('quiz_results') || '[]');
+    allResults.push(resultsData);
+    
+    // Keep only last 10 results to avoid storage bloat
+    if (allResults.length > 10) {
+        allResults = allResults.slice(-10);
+    }
+    
+    localStorage.setItem('quiz_results', JSON.stringify(allResults));
+    
+    // Clear current quiz progress since it's complete
+    localStorage.removeItem('quiz_progress');
+});
+
+function createCelebrationEffect() {
+    // Create confetti for high scores
+    const colors = ['#1E7ED8', '#27AE60', '#FF8C00', '#E74C3C', '#FFD700'];
+    const celebrationContainer = document.createElement('div');
+    celebrationContainer.className = 'celebration';
+    celebrationContainer.style.position = 'fixed';
+    celebrationContainer.style.top = '0';
+    celebrationContainer.style.left = '0';
+    celebrationContainer.style.width = '100%';
+    celebrationContainer.style.height = '100%';
+    celebrationContainer.style.pointerEvents = 'none';
+    celebrationContainer.style.zIndex = '1000';
+    
+    document.body.appendChild(celebrationContainer);
+    
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'absolute';
+        confetti.style.width = '10px';
+        confetti.style.height = '10px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animation = `confettiFall ${(Math.random() * 3 + 2)}s linear infinite`;
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        celebrationContainer.appendChild(confetti);
+    }
+    
+    // Clean up after 5 seconds
+    setTimeout(() => {
+        celebrationContainer.remove();
+    }, 5000);
+}
+
+function shareResults() {
+    const quizTitle = "{{ quiz.title }}";
+    const score = {{ score_percentage }};
+    const shareText = `I just completed the "${quizTitle}" quiz on NeuroQuiz and scored ${score}%! 🧠✨ Check out this neurodivergent-friendly learning platform.`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'My NeuroQuiz Results',
+            text: shareText,
+            url: window.location.href
+        }).catch(console.error);
+    } else {
+        // Fallback to clipboard
+        navigator.clipboard.writeText(shareText + '\n' + window.location.href)
+            .then(() => {
+                showToast('Results copied to clipboard!', 'success');
+            })
+            .catch(() => {
+                showToast('Unable to share results', 'error');
+            });
+    }
+}
+
+function downloadProgress() {
+    const allResults = JSON.parse(localStorage.getItem('quiz_results') || '[]');
+    const progressReport = {
+        generatedAt: new Date().toISOString(),
+        totalQuizzes: allResults.length,
+        results: allResults,
+        summary: {
+            averageScore: allResults.reduce((sum, r) => sum + r.score, 0) / allResults.length || 0,
+            totalCorrect: allResults.reduce((sum, r) => sum + r.correctCount, 0),
+            totalQuestions: allResults.reduce((sum, r) => sum + r.totalQuestions, 0)
+        }
+    };
+    
+    const blob = new Blob([JSON.stringify(progressReport, null, 2)], {
+        type: 'application/json'
+    });
+    
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `neuroquiz-progress-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showToast('Progress report downloaded!', 'success');
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `position-fixed bottom-0 end-0 m-3 p-3 rounded`;
+    toast.style.zIndex = '9999';
+    toast.style.minWidth = '250px';
+    
+    const colors = {
+        success: 'hsl(var(--secondary-color))',
+        error: 'hsl(var(--danger-color))',
+        info: 'hsl(var(--primary-color))'
+    };
+    
+    toast.style.backgroundColor = colors[type] || colors.info;
+    toast.style.color = 'white';
+    toast.style.animation = 'slideInUp 0.5s ease-out';
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideInUp 0.5s ease-out reverse';
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+}
+
+// Add CSS for confetti animation
+const style = document.createElement('style');
+style.textContent = `
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}

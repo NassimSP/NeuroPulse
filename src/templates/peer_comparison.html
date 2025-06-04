@@ -1,0 +1,436 @@
+{% extends "base.html" %}
+
+{% block title %}Peer Comparison - {{ topic_details.name }} - NeuroPulse{% endblock %}
+
+{% block description %}Compare your progress with peers in {{ topic_details.name }}{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="comparison-header mb-4">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <h1 class="display-6 fw-bold mb-2" style="color: hsl(var(--primary-color));">
+                <i data-feather="bar-chart-2" class="me-3" style="width: 36px; height: 36px;"></i>
+                Peer Comparison
+            </h1>
+            <p class="lead mb-0" style="color: hsl(var(--text-secondary));">
+                {{ topic_details.name }} - See how you compare with fellow learners
+            </p>
+        </div>
+        <div>
+            <a href="/find-study-partners/{{ category }}/{{ topic }}" class="btn btn-primary">
+                <i data-feather="user-plus"></i>
+                Find Study Partners
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if comparison_data.message %}
+<!-- No Data Available -->
+<div class="card text-center py-5">
+    <div class="card-body">
+        <i data-feather="users" style="width: 64px; height: 64px; color: hsl(var(--text-muted)); margin-bottom: 1rem;"></i>
+        <h3 style="color: hsl(var(--text-secondary));">{{ comparison_data.message }}</h3>
+        <p style="color: hsl(var(--text-muted));">
+            Start learning and come back to see how you compare with peers!
+        </p>
+        <a href="/learn/{{ category }}/{{ topic }}" class="btn btn-primary">Start Learning</a>
+    </div>
+</div>
+{% else %}
+
+<!-- Your Performance Overview -->
+<div class="performance-overview mb-5">
+    <div class="card border-primary">
+        <div class="card-body">
+            <h3 class="card-title mb-4">
+                <i data-feather="target" class="me-2"></i>
+                Your Performance
+            </h3>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ comparison_data.user_stats.accuracy }}%</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                        <div class="stat-icon">
+                            <i data-feather="check-circle" style="color: hsl(var(--secondary-color));"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ comparison_data.user_stats.total_questions }}</div>
+                        <div class="stat-label">Questions Answered</div>
+                        <div class="stat-icon">
+                            <i data-feather="help-circle" style="color: hsl(var(--primary-color));"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ comparison_data.user_stats.level.title() }}</div>
+                        <div class="stat-label">Current Level</div>
+                        <div class="stat-icon">
+                            <i data-feather="trending-up" style="color: hsl(var(--accent-color));"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ comparison_data.user_stats.streak }}</div>
+                        <div class="stat-label">Learning Streak</div>
+                        <div class="stat-icon">
+                            <i data-feather="zap" style="color: hsl(var(--warning-color));"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Peer Ranking -->
+<div class="row g-4 mb-5">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h4 class="card-title">
+                    <i data-feather="award" class="me-2"></i>
+                    Your Ranking
+                </h4>
+                <div class="ranking-display">
+                    <div class="percentile-circle">
+                        <div class="percentile-number">{{ comparison_data.peer_ranking.percentile }}%</div>
+                        <div class="percentile-label">Percentile</div>
+                    </div>
+                    <p class="ranking-text">
+                        You rank <strong>#{{ comparison_data.peer_ranking.rank }}</strong> 
+                        out of <strong>{{ comparison_data.peer_ranking.total_users }}</strong> learners
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h4 class="card-title">
+                    <i data-feather="users" class="me-2"></i>
+                    Similar Level Comparison
+                </h4>
+                <div class="comparison-stats">
+                    <div class="comparison-item">
+                        <span class="label">Average Accuracy:</span>
+                        <span class="value">{{ comparison_data.similar_level_comparison.avg_accuracy }}%</span>
+                        <span class="indicator 
+                            {% if comparison_data.similar_level_comparison.user_vs_avg == 'above' %}text-success{% else %}text-warning{% endif %}">
+                            {% if comparison_data.similar_level_comparison.user_vs_avg == 'above' %}↑{% else %}↓{% endif %}
+                        </span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="label">Average Questions:</span>
+                        <span class="value">{{ comparison_data.similar_level_comparison.avg_questions }}</span>
+                    </div>
+                    <div class="comparison-status">
+                        {% if comparison_data.similar_level_comparison.user_vs_avg == 'above' %}
+                        <span class="badge bg-success">Above Average</span>
+                        {% else %}
+                        <span class="badge bg-warning">Room for Improvement</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Performers -->
+<div class="card mb-5">
+    <div class="card-header">
+        <h4 class="mb-0">
+            <i data-feather="trophy" class="me-2"></i>
+            Top Performers in {{ topic_details.name }}
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="top-performers-list">
+            {% for performer in comparison_data.top_performers %}
+            <div class="performer-item">
+                <div class="performer-rank">
+                    {% if loop.index == 1 %}
+                    <i data-feather="award" style="color: #FFD700;"></i>
+                    {% elif loop.index == 2 %}
+                    <i data-feather="award" style="color: #C0C0C0;"></i>
+                    {% elif loop.index == 3 %}
+                    <i data-feather="award" style="color: #CD7F32;"></i>
+                    {% else %}
+                    <span class="rank-number">{{ loop.index }}</span>
+                    {% endif %}
+                </div>
+                <div class="performer-info">
+                    <div class="performer-name">Learner {{ performer.user_id[:8] }}</div>
+                    <div class="performer-stats">
+                        {{ (performer.accuracy * 100)|round(1) }}% accuracy • 
+                        {{ performer.total_questions }} questions • 
+                        {{ performer.level.title() }} level
+                    </div>
+                </div>
+                <div class="performer-badges">
+                    <span class="badge-count">{{ performer.badges_count }} badges</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Learning Insights -->
+<div class="card">
+    <div class="card-header">
+        <h4 class="mb-0">
+            <i data-feather="lightbulb" class="me-2"></i>
+            Personalized Insights
+        </h4>
+    </div>
+    <div class="card-body">
+        {% if comparison_data.learning_insights %}
+        <div class="insights-list">
+            {% for insight in comparison_data.learning_insights %}
+            <div class="insight-item">
+                <i data-feather="arrow-right" class="me-2" style="color: hsl(var(--primary-color));"></i>
+                {{ insight }}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="insight-item">
+            <i data-feather="star" class="me-2" style="color: hsl(var(--warning-color));"></i>
+            Keep up the great work! Your learning progress is on track.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}
+
+{% block styles %}
+<style>
+.comparison-header {
+    background: linear-gradient(135deg, hsl(var(--primary-color) / 0.1), hsl(var(--secondary-color) / 0.05));
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    border: 2px solid hsl(var(--primary-color) / 0.2);
+}
+
+.performance-overview .card {
+    background: linear-gradient(135deg, hsl(var(--secondary-color) / 0.05), hsl(var(--primary-color) / 0.05));
+}
+
+.stat-card {
+    background: hsl(var(--surface));
+    border: 2px solid hsl(var(--surface-alt));
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: hsl(var(--primary-color));
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: hsl(var(--text-primary));
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+    font-weight: 500;
+}
+
+.stat-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    opacity: 0.6;
+}
+
+.ranking-display {
+    padding: 2rem;
+}
+
+.percentile-circle {
+    width: 120px;
+    height: 120px;
+    border: 6px solid hsl(var(--primary-color));
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, hsl(var(--primary-color) / 0.1), hsl(var(--secondary-color) / 0.05));
+}
+
+.percentile-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: hsl(var(--primary-color));
+}
+
+.percentile-label {
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+}
+
+.ranking-text {
+    color: hsl(var(--text-secondary));
+    margin: 0;
+}
+
+.comparison-stats {
+    space-y: 1rem;
+}
+
+.comparison-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid hsl(var(--surface-alt));
+}
+
+.comparison-item:last-of-type {
+    border-bottom: none;
+}
+
+.comparison-item .label {
+    color: hsl(var(--text-secondary));
+    font-weight: 500;
+}
+
+.comparison-item .value {
+    color: hsl(var(--text-primary));
+    font-weight: 600;
+}
+
+.comparison-item .indicator {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.comparison-status {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.top-performers-list {
+    space-y: 1rem;
+}
+
+.performer-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid hsl(var(--surface-alt));
+    border-radius: var(--border-radius-sm);
+    background: hsl(var(--surface) / 0.5);
+}
+
+.performer-rank {
+    width: 40px;
+    text-align: center;
+    margin-right: 1rem;
+}
+
+.rank-number {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+}
+
+.performer-info {
+    flex: 1;
+}
+
+.performer-name {
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+    margin-bottom: 0.25rem;
+}
+
+.performer-stats {
+    font-size: var(--font-size-sm);
+    color: hsl(var(--text-secondary));
+}
+
+.performer-badges {
+    text-align: right;
+}
+
+.badge-count {
+    background: hsl(var(--accent-color) / 0.2);
+    color: hsl(var(--accent-color));
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.insights-list {
+    space-y: 1rem;
+}
+
+.insight-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: hsl(var(--surface) / 0.5);
+    border: 1px solid hsl(var(--surface-alt));
+    border-radius: var(--border-radius-sm);
+    color: hsl(var(--text-secondary));
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
+    
+    // Animate elements
+    const cards = document.querySelectorAll('.stat-card, .performer-item');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.animation = 'slideInUp 0.6s ease-out both';
+    });
+    
+    // Animate percentile circle
+    const percentileCircle = document.querySelector('.percentile-circle');
+    if (percentileCircle) {
+        percentileCircle.style.animation = 'fadeInScale 0.8s ease-out';
+    }
+});
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+</script>
+{% endblock %}

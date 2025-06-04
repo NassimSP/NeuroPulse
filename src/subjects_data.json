@@ -1,0 +1,349 @@
+{
+  "science": {
+    "name": "Science & Technology",
+    "icon": "atom",
+    "color": "#3498db",
+    "topics": {
+      "biology": {
+        "name": "Biology",
+        "subtopics": [
+          "Cell Biology",
+          "Genetics",
+          "Ecology",
+          "Human Anatomy",
+          "Botany",
+          "Zoology"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 120
+      },
+      "chemistry": {
+        "name": "Chemistry",
+        "subtopics": [
+          "Organic Chemistry",
+          "Inorganic Chemistry",
+          "Physical Chemistry",
+          "Biochemistry"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 100
+      },
+      "physics": {
+        "name": "Physics",
+        "subtopics": [
+          "Mechanics",
+          "Thermodynamics",
+          "Electromagnetism",
+          "Quantum Physics"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 150
+      },
+      "computer_science": {
+        "name": "Computer Science",
+        "subtopics": [
+          "Programming",
+          "Data Structures",
+          "Algorithms",
+          "Machine Learning",
+          "Web Development"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 200
+      }
+    }
+  },
+  "mathematics": {
+    "name": "Mathematics",
+    "icon": "calculator",
+    "color": "#e74c3c",
+    "topics": {
+      "algebra": {
+        "name": "Algebra",
+        "subtopics": [
+          "Linear Algebra",
+          "Abstract Algebra",
+          "Boolean Algebra"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 80
+      },
+      "calculus": {
+        "name": "Calculus",
+        "subtopics": [
+          "Differential Calculus",
+          "Integral Calculus",
+          "Multivariable Calculus"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 120
+      },
+      "statistics": {
+        "name": "Statistics",
+        "subtopics": [
+          "Descriptive Statistics",
+          "Inferential Statistics",
+          "Probability Theory"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 90
+      }
+    }
+  },
+  "business": {
+    "name": "Business & Finance",
+    "icon": "trending-up",
+    "color": "#27ae60",
+    "topics": {
+      "finance": {
+        "name": "Finance",
+        "subtopics": [
+          "Personal Finance",
+          "Corporate Finance",
+          "Investment Analysis",
+          "Risk Management"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 100
+      },
+      "marketing": {
+        "name": "Marketing",
+        "subtopics": [
+          "Digital Marketing",
+          "Brand Management",
+          "Market Research",
+          "Consumer Psychology"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 80
+      },
+      "management": {
+        "name": "Management",
+        "subtopics": [
+          "Project Management",
+          "Leadership",
+          "Operations",
+          "Strategic Planning"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 90
+      }
+    }
+  },
+  "engineering": {
+    "name": "Engineering",
+    "icon": "settings",
+    "color": "#f39c12",
+    "topics": {
+      "electrical": {
+        "name": "Electrical Engineering",
+        "subtopics": [
+          "Circuit Analysis",
+          "Power Systems",
+          "Electronics",
+          "Signal Processing"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 150
+      },
+      "mechanical": {
+        "name": "Mechanical Engineering",
+        "subtopics": [
+          "Thermodynamics",
+          "Fluid Mechanics",
+          "Materials Science",
+          "Machine Design"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 140
+      },
+      "civil": {
+        "name": "Civil Engineering",
+        "subtopics": [
+          "Structural Engineering",
+          "Geotechnical Engineering",
+          "Transportation",
+          "Environmental"
+        ],
+        "difficulty_levels": [
+          "foundation",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 130
+      }
+    }
+  },
+  "languages": {
+    "name": "Languages",
+    "icon": "globe",
+    "color": "#9b59b6",
+    "topics": {
+      "spanish": {
+        "name": "Spanish",
+        "subtopics": [
+          "Basic Conversation",
+          "Grammar",
+          "Business Spanish",
+          "Literature"
+        ],
+        "difficulty_levels": [
+          "beginner",
+          "intermediate",
+          "advanced",
+          "fluent"
+        ],
+        "estimated_hours": 200
+      },
+      "french": {
+        "name": "French",
+        "subtopics": [
+          "Basic Conversation",
+          "Grammar",
+          "Business French",
+          "Literature"
+        ],
+        "difficulty_levels": [
+          "beginner",
+          "intermediate",
+          "advanced",
+          "fluent"
+        ],
+        "estimated_hours": 200
+      },
+      "programming_languages": {
+        "name": "Programming Languages",
+        "subtopics": [
+          "Python",
+          "JavaScript",
+          "Java",
+          "C++",
+          "Rust"
+        ],
+        "difficulty_levels": [
+          "beginner",
+          "intermediate",
+          "advanced",
+          "expert"
+        ],
+        "estimated_hours": 300
+      }
+    }
+  },
+  "trades": {
+    "name": "Skilled Trades",
+    "icon": "tool",
+    "color": "#34495e",
+    "topics": {
+      "electrical_trade": {
+        "name": "Electrical Work",
+        "subtopics": [
+          "Residential Wiring",
+          "Commercial Systems",
+          "Safety Codes",
+          "Motor Controls"
+        ],
+        "difficulty_levels": [
+          "apprentice",
+          "journeyman",
+          "advanced",
+          "master"
+        ],
+        "estimated_hours": 180
+      },
+      "plumbing": {
+        "name": "Plumbing",
+        "subtopics": [
+          "Pipe Installation",
+          "Fixture Repair",
+          "Drainage Systems",
+          "Gas Lines"
+        ],
+        "difficulty_levels": [
+          "apprentice",
+          "journeyman",
+          "advanced",
+          "master"
+        ],
+        "estimated_hours": 160
+      },
+      "automotive": {
+        "name": "Automotive Repair",
+        "subtopics": [
+          "Engine Diagnostics",
+          "Electrical Systems",
+          "Brake Systems",
+          "Transmission"
+        ],
+        "difficulty_levels": [
+          "apprentice",
+          "journeyman",
+          "advanced",
+          "master"
+        ],
+        "estimated_hours": 200
+      }
+    }
+  }
+}

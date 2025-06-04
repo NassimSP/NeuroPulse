@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroPulse - Premium Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            line-height: 1.6;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #FFE082, #FFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .welcome-text {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .user-menu {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .learning-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #FFE082;
+        }
+        
+        .quick-start {
+            margin-bottom: 30px;
+        }
+        
+        .subject-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .difficulty-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-btn {
+            padding: 8px 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .difficulty-btn.selected {
+            background: rgba(255,224,130,0.3);
+            border-color: #FFE082;
+        }
+        
+        .start-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
+        }
+        
+        .stats-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #4CAF50;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .achievement-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .achievement-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .achievement-icon {
+            font-size: 2rem;
+        }
+        
+        .achievement-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-info p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .popular-subjects {
+            margin-top: 40px;
+        }
+        
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .subject-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+        
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .subject-icon {
+            font-size: 2.5rem;
+        }
+        
+        .subject-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .subject-info .category {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .subject-description {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .ai-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .difficulty-selector {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo">🧠 NeuroPulse</div>
+                <div>
+                    <div class="welcome-text">Welcome back, {{ user.username }}!</div>
+                    <div class="ai-badge">{{ "AI-Powered Learning" if ai_enabled else "Smart Learning System" }}</div>
+                </div>
+            </div>
+            <div class="user-menu">
+                <a href="/explore" class="nav-btn">Explore Subjects</a>
+                <a href="/dashboard" class="nav-btn">Dashboard</a>
+                <a href="/profile" class="nav-btn">Profile</a>
+            </div>
+        </div>
+        
+        <div class="main-grid">
+            <div class="learning-section">
+                <h2 class="section-title">Start Learning</h2>
+                
+                <form class="quick-start" method="POST" action="/start-learning">
+                    <input type="text" 
+                           name="subject" 
+                           class="subject-input" 
+                           placeholder="What would you like to learn today? (e.g., Python programming, electrical safety, quantum physics)"
+                           required>
+                    
+                    <div class="difficulty-selector">
+                        <input type="radio" name="difficulty" value="foundation" id="foundation" checked>
+                        <label for="foundation" class="difficulty-btn selected">Foundation</label>
+                        
+                        <input type="radio" name="difficulty" value="beginner" id="beginner">
+                        <label for="beginner" class="difficulty-btn">Beginner</label>
+                        
+                        <input type="radio" name="difficulty" value="intermediate" id="intermediate">
+                        <label for="intermediate" class="difficulty-btn">Intermediate</label>
+                        
+                        <input type="radio" name="difficulty" value="advanced" id="advanced">
+                        <label for="advanced" class="difficulty-btn">Advanced</label>
+                        
+                        <input type="radio" name="difficulty" value="expert" id="expert">
+                        <label for="expert" class="difficulty-btn">Expert</label>
+                    </div>
+                    
+                    <select name="question_count" style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 10px; border: none;">
+                        <option value="5">5 Questions (Quick Session)</option>
+                        <option value="10" selected>10 Questions (Standard)</option>
+                        <option value="15">15 Questions (Extended)</option>
+                        <option value="20">20 Questions (Deep Dive)</option>
+                    </select>
+                    
+                    <button type="submit" class="start-btn">🚀 Begin Learning Journey</button>
+                </form>
+            </div>
+            
+            <div class="stats-sidebar">
+                <div class="stat-card">
+                    <div class="stat-number">{{ user.total_sessions }}</div>
+                    <div class="stat-label">Sessions Completed</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">{{ "%.0f"|format(user.accuracy_percentage()) }}%</div>
+                    <div class="stat-label">Overall Accuracy</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">{{ user.current_streak }}</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                
+                {% if recent_achievements %}
+                <div class="achievement-card">
+                    <div class="achievement-header">
+                        <div class="achievement-icon">🏆</div>
+                        <div class="achievement-info">
+                            <h3>Recent Achievement</h3>
+                            <p>{{ recent_achievements[-1].get('title', 'New Badge Earned') }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="popular-subjects">
+            <h2 class="section-title">Popular Learning Paths</h2>
+            
+            <div class="subjects-grid">
+                <a href="/start-learning?subject=Python Programming" class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-icon">🐍</div>
+                        <div class="subject-info">
+                            <h3>Python Programming</h3>
+                            <div class="category">Technology</div>
+                        </div>
+                    </div>
+                    <div class="subject-description">
+                        Master programming fundamentals with hands-on projects and real-world applications
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 25%;"></div>
+                    </div>
+                    <small>Foundation → Expert • 3-8 weeks</small>
+                </a>
+                
+                <a href="/start-learning?subject=Electrical Engineering" class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-icon">⚡</div>
+                        <div class="subject-info">
+                            <h3>Electrical Engineering</h3>
+                            <div class="category">Engineering</div>
+                        </div>
+                    </div>
+                    <div class="subject-description">
+                        From basic circuits to advanced electrical systems and safety protocols
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%;"></div>
+                    </div>
+                    <small>Foundation → Expert • 4-10 weeks</small>
+                </a>
+                
+                <a href="/start-learning?subject=Financial Planning" class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-icon">💰</div>
+                        <div class="subject-info">
+                            <h3>Financial Planning</h3>
+                            <div class="category">Finance</div>
+                        </div>
+                    </div>
+                    <div class="subject-description">
+                        Personal finance, budgeting, investments, and wealth-building strategies
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%;"></div>
+                    </div>
+                    <small>Foundation → Advanced • 2-5 weeks</small>
+                </a>
+                
+                <a href="/start-learning?subject=Data Analysis" class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-icon">📊</div>
+                        <div class="subject-info">
+                            <h3>Data Analysis</h3>
+                            <div class="category">Technology</div>
+                        </div>
+                    </div>
+                    <div class="subject-description">
+                        Excel mastery, statistics, data visualization, and analytical thinking
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%;"></div>
+                    </div>
+                    <small>Foundation → Expert • 3-7 weeks</small>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Handle difficulty selection
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                // Update radio button
+                const radioId = this.getAttribute('for');
+                document.getElementById(radioId).checked = true;
+            });
+        });
+        
+        // Auto-focus subject input
+        document.querySelector('.subject-input').focus();
+        
+        // Popular subject selection
+        function selectSubject(subject) {
+            document.querySelector('.subject-input').value = subject;
+        }
+    </script>
+</body>
+</html>

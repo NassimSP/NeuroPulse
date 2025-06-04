@@ -1,0 +1,592 @@
+{
+  "journey_maps": {
+    "3523d713-5abf-4e71-97ef-01f486e45ef9": {
+      "Python Programming": {
+        "current_level": 0,
+        "current_milestone": 0,
+        "total_xp": 0,
+        "completed_milestones": [],
+        "unlocked_concepts": [],
+        "journey_start_date": "2025-06-04T18:42:26.620855",
+        "last_activity": "2025-06-04T18:42:26.620859",
+        "learning_path": "beginner",
+        "achievements": [],
+        "streak_data": {
+          "current_streak": 0,
+          "longest_streak": 0,
+          "last_activity_date": null
+        }
+      }
+    },
+    "20e46640-3c11-4246-bbc5-071de43a96dc": {
+      "Mathematics": {
+        "current_level": 0,
+        "current_milestone": 0,
+        "total_xp": 0,
+        "completed_milestones": [],
+        "unlocked_concepts": [],
+        "journey_start_date": "2025-06-04T18:42:29.963079",
+        "last_activity": "2025-06-04T18:42:29.963085",
+        "learning_path": "beginner",
+        "achievements": [],
+        "streak_data": {
+          "current_streak": 0,
+          "longest_streak": 0,
+          "last_activity_date": null
+        }
+      }
+    },
+    "9c719b49-9e72-4451-922f-be70b4fa7eec": {
+      "Mathematics": {
+        "current_level": 0,
+        "current_milestone": 0,
+        "total_xp": 0,
+        "completed_milestones": [],
+        "unlocked_concepts": [],
+        "journey_start_date": "2025-06-04T18:42:34.867746",
+        "last_activity": "2025-06-04T18:42:34.867751",
+        "learning_path": "beginner",
+        "achievements": [],
+        "streak_data": {
+          "current_streak": 0,
+          "longest_streak": 0,
+          "last_activity_date": null
+        }
+      }
+    },
+    "user_58f05df4": {
+      "Python Programming": {
+        "current_level": 0,
+        "current_milestone": 0,
+        "total_xp": 0,
+        "completed_milestones": [],
+        "unlocked_concepts": [],
+        "journey_start_date": "2025-06-04T18:42:43.172634",
+        "last_activity": "2025-06-04T18:42:43.172641",
+        "learning_path": "beginner",
+        "achievements": [],
+        "streak_data": {
+          "current_streak": 0,
+          "longest_streak": 0,
+          "last_activity_date": null
+        }
+      }
+    },
+    "198fd8ca-9d6e-4538-935b-087242ef08ae": {
+      "Mathematics": {
+        "current_level": 0,
+        "current_milestone": 0,
+        "total_xp": 0,
+        "completed_milestones": [],
+        "unlocked_concepts": [],
+        "journey_start_date": "2025-06-04T18:43:04.870511",
+        "last_activity": "2025-06-04T18:43:04.870517",
+        "learning_path": "beginner",
+        "achievements": [],
+        "streak_data": {
+          "current_streak": 0,
+          "longest_streak": 0,
+          "last_activity_date": null
+        }
+      }
+    },
+    "f9ae74da-fbba-4d40-a065-e6e88d87698f": {
+      "Mathematics": {
+        "current_level": 0,
+        "current_milestone": 0,
+        "total_xp": 0,
+        "completed_milestones": [],
+        "unlocked_concepts": [],
+        "journey_start_date": "2025-06-04T18:43:34.886817",
+        "last_activity": "2025-06-04T18:43:34.886822",
+        "learning_path": "beginner",
+        "achievements": [],
+        "streak_data": {
+          "current_streak": 0,
+          "longest_streak": 0,
+          "last_activity_date": null
+        }
+      }
+    },
+    "73f53649-f7ba-4587-9642-d05d7c937015": {
+      "Mathematics": {
+        "current_level": 0,
+        "current_milestone": 0,
+        "total_xp": 0,
+        "completed_milestones": [],
+        "unlocked_concepts": [],
+        "journey_start_date": "2025-06-04T18:44:04.978362",
+        "last_activity": "2025-06-04T18:44:04.978367",
+        "learning_path": "beginner",
+        "achievements": [],
+        "streak_data": {
+          "current_streak": 0,
+          "longest_streak": 0,
+          "last_activity_date": null
+        }
+      }
+    },
+    "9cabd8c0-454d-4a28-b59f-535900d8549a": {
+      "Mathematics": {
+        "current_level": 0,
+        "current_milestone": 0,
+        "total_xp": 0,
+        "completed_milestones": [],
+        "unlocked_concepts": [],
+        "journey_start_date": "2025-06-04T18:44:34.872913",
+        "last_activity": "2025-06-04T18:44:34.872918",
+        "learning_path": "beginner",
+        "achievements": [],
+        "streak_data": {
+          "current_streak": 0,
+          "longest_streak": 0,
+          "last_activity_date": null
+        }
+      }
+    },
+    "193488d0-8bd4-481d-8032-9ad34834bfdf": {
+      "Mathematics": {
+        "current_level": 0,
+        "current_milestone": 0,
+        "total_xp": 0,
+        "completed_milestones": [],
+        "unlocked_concepts": [],
+        "journey_start_date": "2025-06-04T18:45:04.870716",
+        "last_activity": "2025-06-04T18:45:04.870722",
+        "learning_path": "beginner",
+        "achievements": [],
+        "streak_data": {
+          "current_streak": 0,
+          "longest_streak": 0,
+          "last_activity_date": null
+        }
+      }
+    },
+    "e3eeabc1-dc21-4111-b5fc-75c2fc65b1fe": {
+      "Mathematics": {
+        "current_level": 0,
+        "current_milestone": 0,
+        "total_xp": 0,
+        "completed_milestones": [],
+        "unlocked_concepts": [],
+        "journey_start_date": "2025-06-04T18:45:34.940617",
+        "last_activity": "2025-06-04T18:45:34.940622",
+        "learning_path": "beginner",
+        "achievements": [],
+        "streak_data": {
+          "current_streak": 0,
+          "longest_streak": 0,
+          "last_activity_date": null
+        }
+      }
+    }
+  },
+  "milestones": {},
+  "learning_paths": {},
+  "progress_tracking": {},
+  "subject_hierarchies": {
+    "Python Programming": {
+      "levels": [
+        {
+          "name": "Foundation",
+          "description": "Basic syntax and concepts",
+          "milestones": [
+            {
+              "name": "Variables & Data Types",
+              "xp_required": 0,
+              "concepts": [
+                "variables",
+                "strings",
+                "numbers",
+                "booleans"
+              ]
+            },
+            {
+              "name": "Control Structures",
+              "xp_required": 100,
+              "concepts": [
+                "if/else",
+                "loops",
+                "conditions"
+              ]
+            },
+            {
+              "name": "Functions Basics",
+              "xp_required": 200,
+              "concepts": [
+                "function definition",
+                "parameters",
+                "return values"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Intermediate",
+          "description": "Data structures and OOP",
+          "milestones": [
+            {
+              "name": "Data Structures",
+              "xp_required": 350,
+              "concepts": [
+                "lists",
+                "dictionaries",
+                "sets",
+                "tuples"
+              ]
+            },
+            {
+              "name": "Object-Oriented Programming",
+              "xp_required": 500,
+              "concepts": [
+                "classes",
+                "objects",
+                "inheritance",
+                "polymorphism"
+              ]
+            },
+            {
+              "name": "File Handling & Exceptions",
+              "xp_required": 650,
+              "concepts": [
+                "file I/O",
+                "error handling",
+                "try/except"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Advanced",
+          "description": "Advanced concepts and libraries",
+          "milestones": [
+            {
+              "name": "Advanced Functions",
+              "xp_required": 800,
+              "concepts": [
+                "decorators",
+                "generators",
+                "lambda functions"
+              ]
+            },
+            {
+              "name": "Libraries & Modules",
+              "xp_required": 1000,
+              "concepts": [
+                "numpy",
+                "pandas",
+                "requests",
+                "json"
+              ]
+            },
+            {
+              "name": "Web Development",
+              "xp_required": 1200,
+              "concepts": [
+                "Flask",
+                "APIs",
+                "databases"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Expert",
+          "description": "Professional development skills",
+          "milestones": [
+            {
+              "name": "Testing & Debugging",
+              "xp_required": 1500,
+              "concepts": [
+                "unit testing",
+                "debugging",
+                "profiling"
+              ]
+            },
+            {
+              "name": "Advanced Patterns",
+              "xp_required": 1800,
+              "concepts": [
+                "design patterns",
+                "architecture",
+                "best practices"
+              ]
+            },
+            {
+              "name": "Performance Optimization",
+              "xp_required": 2100,
+              "concepts": [
+                "optimization",
+                "concurrency",
+                "memory management"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Electrical Engineering": {
+      "levels": [
+        {
+          "name": "Foundation",
+          "description": "Basic electrical concepts",
+          "milestones": [
+            {
+              "name": "Basic Circuit Theory",
+              "xp_required": 0,
+              "concepts": [
+                "voltage",
+                "current",
+                "resistance",
+                "power"
+              ]
+            },
+            {
+              "name": "Ohms Law & Kirchhoff",
+              "xp_required": 120,
+              "concepts": [
+                "ohms law",
+                "KVL",
+                "KCL",
+                "circuit analysis"
+              ]
+            },
+            {
+              "name": "AC/DC Fundamentals",
+              "xp_required": 250,
+              "concepts": [
+                "AC circuits",
+                "DC circuits",
+                "waveforms",
+                "frequency"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Intermediate",
+          "description": "Circuit analysis and components",
+          "milestones": [
+            {
+              "name": "Complex Circuits",
+              "xp_required": 400,
+              "concepts": [
+                "impedance",
+                "reactance",
+                "phasors",
+                "complex analysis"
+              ]
+            },
+            {
+              "name": "Electronic Components",
+              "xp_required": 600,
+              "concepts": [
+                "diodes",
+                "transistors",
+                "capacitors",
+                "inductors"
+              ]
+            },
+            {
+              "name": "Amplifiers & Filters",
+              "xp_required": 800,
+              "concepts": [
+                "op-amps",
+                "filters",
+                "amplification",
+                "feedback"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Advanced",
+          "description": "System design and analysis",
+          "milestones": [
+            {
+              "name": "Digital Electronics",
+              "xp_required": 1000,
+              "concepts": [
+                "logic gates",
+                "flip-flops",
+                "counters",
+                "memory"
+              ]
+            },
+            {
+              "name": "Microcontrollers",
+              "xp_required": 1300,
+              "concepts": [
+                "microcontrollers",
+                "programming",
+                "interfaces",
+                "sensors"
+              ]
+            },
+            {
+              "name": "Power Systems",
+              "xp_required": 1600,
+              "concepts": [
+                "power electronics",
+                "transformers",
+                "motors",
+                "generators"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Data Analysis": {
+      "levels": [
+        {
+          "name": "Foundation",
+          "description": "Data fundamentals",
+          "milestones": [
+            {
+              "name": "Data Types & Structures",
+              "xp_required": 0,
+              "concepts": [
+                "data types",
+                "datasets",
+                "variables",
+                "observations"
+              ]
+            },
+            {
+              "name": "Descriptive Statistics",
+              "xp_required": 100,
+              "concepts": [
+                "mean",
+                "median",
+                "mode",
+                "standard deviation"
+              ]
+            },
+            {
+              "name": "Data Visualization Basics",
+              "xp_required": 200,
+              "concepts": [
+                "charts",
+                "graphs",
+                "plots",
+                "visualization principles"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Intermediate",
+          "description": "Statistical analysis",
+          "milestones": [
+            {
+              "name": "Probability & Distributions",
+              "xp_required": 350,
+              "concepts": [
+                "probability",
+                "distributions",
+                "sampling",
+                "hypothesis testing"
+              ]
+            },
+            {
+              "name": "Correlation & Regression",
+              "xp_required": 500,
+              "concepts": [
+                "correlation",
+                "linear regression",
+                "multivariate analysis"
+              ]
+            },
+            {
+              "name": "Data Cleaning & Preprocessing",
+              "xp_required": 650,
+              "concepts": [
+                "data cleaning",
+                "missing values",
+                "outliers",
+                "normalization"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Mathematics": {
+      "levels": [
+        {
+          "name": "Foundation",
+          "description": "Basic mathematical concepts",
+          "milestones": [
+            {
+              "name": "Arithmetic Operations",
+              "xp_required": 0,
+              "concepts": [
+                "addition",
+                "subtraction",
+                "multiplication",
+                "division"
+              ]
+            },
+            {
+              "name": "Fractions & Decimals",
+              "xp_required": 80,
+              "concepts": [
+                "fractions",
+                "decimals",
+                "percentages",
+                "ratios"
+              ]
+            },
+            {
+              "name": "Basic Algebra",
+              "xp_required": 160,
+              "concepts": [
+                "variables",
+                "equations",
+                "inequalities",
+                "expressions"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Intermediate",
+          "description": "Advanced algebra and geometry",
+          "milestones": [
+            {
+              "name": "Quadratic Equations",
+              "xp_required": 280,
+              "concepts": [
+                "quadratics",
+                "factoring",
+                "completing the square"
+              ]
+            },
+            {
+              "name": "Geometry Fundamentals",
+              "xp_required": 400,
+              "concepts": [
+                "shapes",
+                "area",
+                "volume",
+                "angles"
+              ]
+            },
+            {
+              "name": "Trigonometry Basics",
+              "xp_required": 550,
+              "concepts": [
+                "sine",
+                "cosine",
+                "tangent",
+                "triangles"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "last_updated": "2025-06-04T21:29:42.599701"
+}

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NeuroPulse - Universal Adaptive Learning{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons@4.29.0/dist/feather.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js for Advanced Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Meta tags for accessibility and SEO -->
+    <meta name="description" content="{% block description %}NeuroPulse: Enterprise-grade adaptive learning platform with AI-powered personalization, immersive technologies, and comprehensive analytics{% endblock %}">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="NeuroPulse">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+</head>
+<body>
+    <!-- Skip to main content link for screen readers -->
+    <a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
+    
+    <!-- Header -->
+    <header class="navbar-custom">
+        <nav class="container-fluid px-4">
+            <div class="navbar-brand-section">
+                <a href="{{ url_for('index') }}" class="brand-link">
+                    <div class="brand-icon">
+                        <i data-feather="cpu"></i>
+                    </div>
+                    <span class="brand-text">NeuroPulse</span>
+                    <span class="brand-tagline">Universal Learning</span>
+                </a>
+            </div>
+            
+            <div class="navbar-menu">
+                <div class="nav-links">
+                    <a href="{{ url_for('subject_browser') }}" class="nav-link">
+                        <i data-feather="book-open"></i>
+                        <span>Learn</span>
+                    </a>
+                    <a href="/social" class="nav-link">
+                        <i data-feather="users"></i>
+                        <span>Social</span>
+                    </a>
+                    <a href="/analytics" class="nav-link">
+                        <i data-feather="bar-chart-2"></i>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="/lms" class="nav-link">
+                        <i data-feather="layers"></i>
+                        <span>LMS</span>
+                    </a>
+                    <a href="/reports" class="nav-link">
+                        <i data-feather="file-text"></i>
+                        <span>Reports</span>
+                    </a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="btn-ai-tutor" onclick="toggleAITutor()">
+                        <i data-feather="message-circle"></i>
+                        <span>AI Tutor</span>
+                    </button>
+                    <div class="user-menu">
+                        <button class="user-avatar" onclick="toggleUserMenu()">
+                            <i data-feather="user"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="/profile">Profile & Settings</a>
+                            <a href="/achievements">Achievements</a>
+                            <a href="/progress">Learning Path</a>
+                            <hr>
+                            <a href="/help">Help & Support</a>
+                            <a href="/logout">Sign Out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- AI Tutor Panel -->
+        <div class="ai-tutor-panel" id="aiTutorPanel">
+            <div class="tutor-header">
+                <h6>AI Learning Assistant</h6>
+                <button onclick="closeAITutor()" class="close-btn">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="tutor-content">
+                <div class="tutor-messages" id="tutorMessages">
+                    <div class="tutor-message">
+                        <div class="message-avatar">
+                            <i data-feather="cpu"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Hi! I'm your AI learning assistant. I can help you with:</p>
+                            <ul>
+                                <li>Explaining concepts</li>
+                                <li>Providing study guidance</li>
+                                <li>Answering questions</li>
+                                <li>Creating practice problems</li>
+                            </ul>
+                            <p>What would you like to learn about today?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tutor-input">
+                    <input type="text" id="tutorInput" placeholder="Ask me anything...">
+                    <button onclick="sendTutorMessage()">
+                        <i data-feather="send"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main content -->
+    <main id="main-content" class="container py-4">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-light mt-5 py-4">
+        <div class="container text-center">
+            <p class="mb-2" style="color: hsl(var(--text-secondary));">
+                Designed with ❤️ for neurodivergent learners
+            </p>
+            <p class="mb-0 small" style="color: hsl(var(--text-muted));">
+                ADHD-friendly • Accessible • Empowering
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap 5 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Initialize Feather Icons -->
+    <script>
+        feather.replace();
+    </script>
+    
+    <!-- Advanced JavaScript Features -->
+    <script>
+        // Global NeuroPulse App Object
+        window.NeuroPulse = {
+            initialized: false,
+            
+            // Initialize the application
+            init() {
+                if (this.initialized) return;
+                
+                this.setupAITutor();
+                this.setupUserMenu();
+                this.setupAnimations();
+                this.setupKeyboardShortcuts();
+                this.setupNotifications();
+                
+                this.initialized = true;
+                console.log('NeuroPulse initialized successfully');
+            },
+            
+            // AI Tutor functionality
+            setupAITutor() {
+                this.aiTutorOpen = false;
+                this.tutorHistory = [];
+            },
+            
+            // User menu functionality
+            setupUserMenu() {
+                this.userMenuOpen = false;
+            },
+            
+            // Setup entrance animations
+            setupAnimations() {
+                // Animate cards on page load
+                const cards = document.querySelectorAll('.card, .nav-card');
+                cards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.6s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 100);
+                });
+            },
+            
+            // Setup keyboard shortcuts
+            setupKeyboardShortcuts() {
+                document.addEventListener('keydown', (e) => {
+                    // Ctrl/Cmd + K for AI Tutor
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                        e.preventDefault();
+                        this.toggleAITutor();
+                    }
+                    
+                    // Escape to close modals
+                    if (e.key === 'Escape') {
+                        this.closeAITutor();
+                        this.closeUserMenu();
+                    }
+                });
+            },
+            
+            // Setup notification system
+            setupNotifications() {
+                this.notifications = [];
+            },
+            
+            // Show notification
+            showNotification(message, type = 'info', duration = 5000) {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <i data-feather="${this.getNotificationIcon(type)}"></i>
+                        <span>${message}</span>
+                    </div>
+                    <button onclick="this.parentElement.remove()">
+                        <i data-feather="x"></i>
+                    </button>
+                `;
+                
+                // Add to notifications container
+                let container = document.getElementById('notifications-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'notifications-container';
+                    container.className = 'notifications-container';
+                    document.body.appendChild(container);
+                }
+                
+                container.appendChild(notification);
+                feather.replace();
+                
+                // Auto remove after duration
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, duration);
+            },
+            
+            getNotificationIcon(type) {
+                const icons = {
+                    success: 'check-circle',
+                    error: 'alert-circle',
+                    warning: 'alert-triangle',
+                    info: 'info'
+                };
+                return icons[type] || 'info';
+            }
+        };
+        
+        // AI Tutor Functions
+        function toggleAITutor() {
+            const panel = document.getElementById('aiTutorPanel');
+            if (NeuroPulse.aiTutorOpen) {
+                closeAITutor();
+            } else {
+                panel.classList.add('show');
+                NeuroPulse.aiTutorOpen = true;
+                document.getElementById('tutorInput').focus();
+            }
+        }
+        
+        function closeAITutor() {
+            const panel = document.getElementById('aiTutorPanel');
+            panel.classList.remove('show');
+            NeuroPulse.aiTutorOpen = false;
+        }
+        
+        function sendTutorMessage() {
+            const input = document.getElementById('tutorInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addTutorMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            addTutorMessage('Thinking...', 'ai', true);
+            
+            // Simulate AI response (in production, this would be an API call)
+            setTimeout(() => {
+                removeTypingIndicator();
+                const response = generateAIResponse(message);
+                addTutorMessage(response, 'ai');
+            }, 1000 + Math.random() * 2000);
+        }
+        
+        function addTutorMessage(content, sender, isTyping = false) {
+            const messagesContainer = document.getElementById('tutorMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `tutor-message ${sender}-message ${isTyping ? 'typing' : ''}`;
+            
+            if (sender === 'ai') {
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">
+                        <i data-feather="cpu"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>${content}</p>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-content user-message-content">
+                        <p>${content}</p>
+                    </div>
+                    <div class="message-avatar user-avatar">
+                        <i data-feather="user"></i>
+                    </div>
+                `;
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            feather.replace();
+        }
+        
+        function removeTypingIndicator() {
+            const typingMessage = document.querySelector('.tutor-message.typing');
+            if (typingMessage) {
+                typingMessage.remove();
+            }
+        }
+        
+        function generateAIResponse(userMessage) {
+            // Advanced AI response generation (simplified for demo)
+            const responses = {
+                greeting: [
+                    "Hello! I'm here to help you learn. What subject would you like to explore today?",
+                    "Hi there! I can help explain concepts, create practice problems, or guide your study session. What interests you?",
+                    "Welcome! I'm your AI learning assistant. How can I support your educational journey today?"
+                ],
+                math: [
+                    "Mathematics is fascinating! Let me break this down step by step for you. Would you like me to create some practice problems?",
+                    "Great math question! Here's how I'd approach this problem... Would you like to try a similar one?",
+                    "Math concepts build on each other. Let me explain the foundation first, then we'll work up to the more complex ideas."
+                ],
+                science: [
+                    "Science is all about understanding how our world works! Let me explain this concept with a real-world example.",
+                    "That's a fantastic science question! The key principle here is... Would you like me to show you an experiment?",
+                    "Science concepts are easier to understand when we see them in action. Here's how this works..."
+                ],
+                help: [
+                    "I can help with explanations, create practice problems, provide study strategies, or answer specific questions. What would be most helpful?",
+                    "My capabilities include: concept explanations, step-by-step problem solving, study guidance, and practice problem generation. How can I assist?",
+                    "I'm here to support your learning in whatever way helps you best. Would you like conceptual explanations or hands-on practice?"
+                ]
+            };
+            
+            const message = userMessage.toLowerCase();
+            
+            if (message.includes('hello') || message.includes('hi')) {
+                return responses.greeting[Math.floor(Math.random() * responses.greeting.length)];
+            } else if (message.includes('math') || message.includes('equation') || message.includes('solve')) {
+                return responses.math[Math.floor(Math.random() * responses.math.length)];
+            } else if (message.includes('science') || message.includes('physics') || message.includes('chemistry')) {
+                return responses.science[Math.floor(Math.random() * responses.science.length)];
+            } else if (message.includes('help') || message.includes('what can you do')) {
+                return responses.help[Math.floor(Math.random() * responses.help.length)];
+            } else {
+                return `That's an interesting question about "${userMessage}". Let me help you understand this concept better. Could you tell me more about what specific aspect you'd like to explore?`;
+            }
+        }
+        
+        // User Menu Functions
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            if (NeuroPulse.userMenuOpen) {
+                closeUserMenu();
+            } else {
+                dropdown.classList.add('show');
+                NeuroPulse.userMenuOpen = true;
+            }
+        }
+        
+        function closeUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.remove('show');
+            NeuroPulse.userMenuOpen = false;
+        }
+        
+        // Enter key support for tutor input
+        document.addEventListener('DOMContentLoaded', function() {
+            const tutorInput = document.getElementById('tutorInput');
+            if (tutorInput) {
+                tutorInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendTutorMessage();
+                    }
+                });
+            }
+            
+            // Initialize NeuroPulse
+            NeuroPulse.init();
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.user-menu')) {
+                    closeUserMenu();
+                }
+                if (!e.target.closest('.ai-tutor-panel') && !e.target.closest('.btn-ai-tutor')) {
+                    // closeAITutor(); // Commented out to prevent accidental closing
+                }
+            });
+        });
+        
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            // Log performance metrics
+            const loadTime = performance.now();
+            console.log(`NeuroPulse loaded in ${loadTime.toFixed(2)}ms`);
+            
+            // Initialize progressive web app features
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js').catch(console.error);
+            }
+        });
+    </script>
+    
+    <!-- Custom Application JavaScript -->
+    <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+    
+    <!-- Additional page-specific scripts -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block title %}{{ quiz.title }} - NeuroQuiz{% endblock %}
+
+{% block description %}Take the {{ quiz.title }} quiz - {{ quiz.description }}{% endblock %}
+
+{% block content %}
+<div class="quiz-container" data-quiz-id="{{ quiz.id }}">
+    <!-- Quiz Header -->
+    <div class="text-center mb-4">
+        <h1 class="mb-2">{{ quiz.title }}</h1>
+        <p class="lead" style="color: hsl(var(--text-secondary));">{{ quiz.description }}</p>
+        
+        <!-- Quiz Meta Information -->
+        <div class="d-flex justify-content-center gap-3 mb-4">
+            <span class="badge badge-category">
+                <i data-feather="folder" class="me-1" style="width: 14px; height: 14px;"></i>
+                {{ quiz.category }}
+            </span>
+            <span class="badge badge-difficulty">
+                <i data-feather="bar-chart" class="me-1" style="width: 14px; height: 14px;"></i>
+                {{ quiz.difficulty }}
+            </span>
+            <span class="badge" style="background-color: hsl(var(--accent-color) / 0.1); color: hsl(var(--accent-color));">
+                <i data-feather="clock" class="me-1" style="width: 14px; height: 14px;"></i>
+                {{ quiz.questions|length }} Questions
+            </span>
+        </div>
+    </div>
+    
+    <!-- Progress Section -->
+    <div class="progress-section mb-4">
+        <div class="question-counter text-center mb-3">
+            Question 1 of {{ quiz.questions|length }}
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" style="width: 0%;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+    
+    <!-- Question Container -->
+    <div class="question-container">
+        <h2 class="question-text">
+            Loading question...
+        </h2>
+        
+        <!-- Answer Options -->
+        <div class="answers-container">
+            <!-- Dynamic content loaded by JavaScript -->
+        </div>
+        
+        <!-- Confidence Rating -->
+        <div class="confidence-container">
+            <label for="confidence-slider" class="confidence-label">
+                <i data-feather="sliders" class="me-2"></i>
+                How confident are you in your answer?
+            </label>
+            <input type="range" id="confidence-slider" class="confidence-slider" min="1" max="5" value="3" step="1">
+            <div class="confidence-labels">
+                <span>Very Low</span>
+                <span>Low</span>
+                <span>Medium</span>
+                <span>High</span>
+                <span>Very High</span>
+            </div>
+            <div class="text-center mt-2">
+                <strong class="confidence-display">Medium</strong>
+            </div>
+        </div>
+        
+        <!-- Feedback Area -->
+        <div class="feedback" role="alert" aria-live="polite">
+            <!-- Dynamic feedback content -->
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="quiz-actions text-center mt-4">
+            <button id="submit-answer" class="btn btn-primary btn-lg" style="display: none;">
+                <i data-feather="check" class="me-2"></i>
+                Submit Answer
+            </button>
+            
+            <button id="next-question" class="btn btn-primary btn-lg" style="display: none;">
+                <i data-feather="arrow-right" class="me-2"></i>
+                Next Question
+            </button>
+        </div>
+    </div>
+    
+    <!-- Accessibility Instructions -->
+    <div class="card mt-4" style="background-color: hsl(var(--surface-alt)); border: none;">
+        <div class="card-body">
+            <h5 class="card-title">
+                <i data-feather="help-circle" class="me-2"></i>
+                Quiz Instructions
+            </h5>
+            <ul class="mb-0 small" style="color: hsl(var(--text-secondary));">
+                <li>Click on an answer option to select it</li>
+                <li>Use the confidence slider to rate how sure you are</li>
+                <li>Click "Submit Answer" to see if you're correct</li>
+                <li>Read the explanation to learn more</li>
+                <li>Take your time - there's no rush!</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: none !important;">
+    <div class="card text-center p-4">
+        <div class="loading mb-3" style="margin: 0 auto;"></div>
+        <p class="mb-0">Loading your quiz...</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Quiz-specific JavaScript initialization
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Feather icons
+    feather.replace();
+    
+    // Add keyboard navigation support
+    document.addEventListener('keydown', function(e) {
+        // Enter key to submit when answer is selected
+        if (e.key === 'Enter' && window.quizApp && window.quizApp.selectedAnswer) {
+            const submitBtn = document.getElementById('submit-answer');
+            const nextBtn = document.getElementById('next-question');
+            
+            if (submitBtn && submitBtn.style.display !== 'none') {
+                submitBtn.click();
+            } else if (nextBtn && nextBtn.style.display !== 'none') {
+                nextBtn.click();
+            }
+        }
+        
+        // Number keys (1-4) to select answers
+        if (e.key >= '1' && e.key <= '4') {
+            const answerOptions = document.querySelectorAll('.answer-option');
+            const index = parseInt(e.key) - 1;
+            if (answerOptions[index]) {
+                answerOptions[index].click();
+            }
+        }
+        
+        // Arrow keys for confidence slider
+        const slider = document.getElementById('confidence-slider');
+        if (e.target === slider) {
+            // Let the slider handle arrow keys naturally
+            return;
+        }
+    });
+    
+    // Add touch/click feedback for mobile
+    document.addEventListener('touchstart', function(e) {
+        if (e.target.classList.contains('answer-option')) {
+            e.target.style.transform = 'scale(0.98)';
+        }
+    });
+    
+    document.addEventListener('touchend', function(e) {
+        if (e.target.classList.contains('answer-option')) {
+            setTimeout(() => {
+                e.target.style.transform = '';
+            }, 100);
+        }
+    });
+    
+    // Focus management for accessibility
+    function focusManagement() {
+        // Focus on the first answer option when question loads
+        const firstOption = document.querySelector('.answer-option');
+        if (firstOption) {
+            firstOption.focus();
+        }
+    }
+    
+    // Set up mutation observer to handle dynamic content
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                feather.replace();
+                
+                // Focus management after content updates
+                if (mutation.target.classList.contains('answers-container')) {
+                    setTimeout(focusManagement, 100);
+                }
+            }
+        });
+    });
+    
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+    
+    // Add visual feedback for confidence slider
+    const confidenceSlider = document.getElementById('confidence-slider');
+    if (confidenceSlider) {
+        confidenceSlider.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            const colors = [
+                'hsl(var(--danger-color))',    // 1 - Very Low
+                'hsl(var(--warning-color))',   // 2 - Low  
+                'hsl(var(--accent-color))',    // 3 - Medium
+                'hsl(var(--primary-color))',   // 4 - High
+                'hsl(var(--secondary-color))'  // 5 - Very High
+            ];
+            
+            this.style.accentColor = colors[value - 1];
+        });
+    }
+    
+    // Prevent accidental navigation away
+    window.addEventListener('beforeunload', function(e) {
+        if (window.quizApp && window.quizApp.currentQuestion > 0) {
+            e.preventDefault();
+            e.returnValue = 'You have a quiz in progress. Are you sure you want to leave?';
+            return e.returnValue;
+        }
+    });
+    
+    // Add encouragement messages
+    const encouragements = [
+        "You're doing great! 🌟",
+        "Keep up the excellent work! 💪",
+        "Your brain is amazing! 🧠",
+        "Learning looks good on you! ✨",
+        "One question at a time! 🎯"
+    ];
+    
+    function showEncouragement() {
+        const message = encouragements[Math.floor(Math.random() * encouragements.length)];
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed bottom-0 end-0 m-3 p-3 rounded';
+        toast.style.background = 'hsl(var(--secondary-color))';
+        toast.style.color = 'white';
+        toast.style.zIndex = '9999';
+        toast.style.animation = 'slideInUp 0.5s ease-out';
+        toast.textContent = message;
+        
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'slideInUp 0.5s ease-out reverse';
+            setTimeout(() => toast.remove(), 500);
+        }, 2000);
+    }
+    
+    // Show encouragement on every 3rd question
+    let questionCount = 0;
+    const originalLoadQuestion = window.quizApp?.loadQuestion;
+    if (originalLoadQuestion) {
+        window.quizApp.loadQuestion = function(...args) {
+            questionCount++;
+            if (questionCount % 3 === 0 && questionCount > 0) {
+                showEncouragement();
+            }
+            return originalLoadQuestion.apply(this, args);
+        };
+    }
+});
+</script>
+{% endblock %}
